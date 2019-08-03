@@ -10,8 +10,10 @@ import (
 )
 
 type Service interface {
-	GetProfileService(ctx context.Context, profileID int) (*entity.Profile, error)
-	CreateProfileService(ctx context.Context, profile *entity.Profile) (*entity.CreateProfileResult, error)
+	GetProfile(ctx context.Context, profileID int) (*entity.Profile, error)
+	CreateProfile(ctx context.Context, profile entity.Profile) (*entity.CreateProfileResult, error)
+	DeleteProfile(ctx context.Context, profileID int) error
+	UpdateProfile(ctx context.Context, profile entity.Profile) error
 }
 
 type serviceImpl struct {

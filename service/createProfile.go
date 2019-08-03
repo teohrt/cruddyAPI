@@ -7,6 +7,6 @@ import (
 )
 
 // TODO
-func (svc serviceImpl) CreateProfileService(ctx context.Context, profile *entity.Profile) (*entity.CreateProfileResult, error) {
+func (svc serviceImpl) CreateProfile(ctx context.Context, profile entity.Profile) (*entity.CreateProfileResult, error) {
 	return &entity.CreateProfileResult{}, nil
 }

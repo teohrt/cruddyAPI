@@ -25,10 +25,10 @@ func Start(c Config) {
 
 	r := mux.NewRouter()
 	s := r.PathPrefix("/cruddyAPI").Subrouter()
-	s.HandleFunc("/profile", handlers.CreateProfileHandler(svc, v)).Methods("POST")
-	s.HandleFunc("/profile/{id}", handlers.GetProfileHandler(svc)).Methods("GET")
-	s.HandleFunc("/profile/{id}", handlers.UpdateProfileHandler(svc, v)).Methods("PUT")
-	s.HandleFunc("/profile/{id}", handlers.DeleteProfileHandler(svc)).Methods("DELETE")
+	s.HandleFunc("/profile", handlers.CreateProfile(svc, v)).Methods("POST")
+	s.HandleFunc("/profile/{id}", handlers.GetProfile(svc)).Methods("GET")
+	s.HandleFunc("/profile/{id}", handlers.UpdateProfile(svc, v)).Methods("PUT")
+	s.HandleFunc("/profile/{id}", handlers.DeleteProfile(svc)).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":"+c.Port, r))
 }

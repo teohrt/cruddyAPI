@@ -6,13 +6,14 @@ import (
 	"net/http"
 
 	"github.com/rs/zerolog"
+	"gopkg.in/go-playground/validator.v9"
+
 	"github.com/teohrt/cruddyAPI/entity"
 	"github.com/teohrt/cruddyAPI/service"
-	"gopkg.in/go-playground/validator.v9"
 )
 
 // TODO
-func UpdateProfileHandler(svc service.Service, v *validator.Validate) Handler {
+func CreateProfile(svc service.Service, v *validator.Validate) Handler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 		logger := zerolog.Ctx(r.Context())

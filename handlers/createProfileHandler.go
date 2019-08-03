@@ -6,12 +6,14 @@ import (
 	"net/http"
 
 	"github.com/rs/zerolog"
+	"gopkg.in/go-playground/validator.v9"
+
 	"github.com/teohrt/cruddyAPI/entity"
 	"github.com/teohrt/cruddyAPI/service"
 )
 
 // TODO
-func CreateProfileHandler(svc service.Service) Handler {
+func CreateProfileHandler(svc service.Service, v *validator.Validate) Handler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 		logger := zerolog.Ctx(r.Context())
@@ -20,6 +22,12 @@ func CreateProfileHandler(svc service.Service) Handler {
 		profile := new(entity.Profile)
 		if err := decoder.Decode(profile); err != nil {
 			logger.Debug().Err(err).Msg("Bad req body")
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		if err := validateProfile(profile, v); err != nil {
+			logger.Debug().Err(err).Msg("Profile validation failed")
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}

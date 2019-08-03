@@ -14,5 +14,5 @@ func (svc serviceImpl) CreateProfile(ctx context.Context, profile entity.Profile
 		return entity.CreateProfileResult{}, err
 	}
 
-	return entity.CreateProfileResult{profile.ID}, nil
+	return entity.CreateProfileResult{ProfileID: profile.ID}, nil
 }

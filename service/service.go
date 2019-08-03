@@ -10,24 +10,22 @@ import (
 )
 
 type Service interface {
-	GetProfile(ctx context.Context, profileID int) (*entity.Profile, error)
 	CreateProfile(ctx context.Context, profile entity.Profile) (*entity.CreateProfileResult, error)
-	DeleteProfile(ctx context.Context, profileID int) error
+	GetProfile(ctx context.Context, profileID int) (*entity.Profile, error)
 	UpdateProfile(ctx context.Context, profile entity.Profile) error
+	DeleteProfile(ctx context.Context, profileID int) error
 }
 
 type serviceImpl struct {
-	Client    dbclient.Client
-	Logger    *zerolog.Logger
-	TableName string
+	Client dbclient.Client
+	Logger *zerolog.Logger
 }
 
 func New(config *dbclient.DBConfig) Service {
 	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 	client := dbclient.New(config, &logger)
 	return serviceImpl{
-		Client:    client,
-		Logger:    &logger,
-		TableName: config.DynamoDBTableName,
+		Client: client,
+		Logger: &logger,
 	}
 }

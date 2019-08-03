@@ -2,4 +2,4 @@ docker run -p 8000:8000 amazon/dynamodb-local
 
 aws dynamodb create-table --cli-input-json file://profiles_table.json --endpoint-url http://localhost:8000
 
-aws dynamodb scan --table-name contactprofile --endpoint-url http://localhost:8000
+aws dynamodb scan --table-name profiles --endpoint-url http://localhost:8000

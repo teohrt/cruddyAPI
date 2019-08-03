@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/rs/zerolog"
 	"github.com/teohrt/cruddyAPI/entity"
@@ -15,7 +16,7 @@ import (
 func UpdateProfile(svc service.Service, v *validator.Validate) Handler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
-		logger := zerolog.Ctx(r.Context())
+		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 		decoder := json.NewDecoder(r.Body)
 
 		profile := new(entity.Profile)

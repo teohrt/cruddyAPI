@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/rs/zerolog"
 	"gopkg.in/go-playground/validator.v9"
@@ -16,7 +17,7 @@ import (
 func CreateProfile(svc service.Service, v *validator.Validate) Handler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
-		logger := zerolog.Ctx(r.Context())
+		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 		decoder := json.NewDecoder(r.Body)
 
 		profile := new(entity.Profile)

@@ -14,3 +14,7 @@ type Address struct {
 	State   string
 	ZipCode string
 }
+
+type CreateProfileResult struct {
+	ProfileID string
+}

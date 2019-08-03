@@ -32,6 +32,23 @@ func CreateProfile(svc service.Service, v *validator.Validate) Handler {
 			return
 		}
 
-		fmt.Fprintf(w, "TODO")
+		result, err := svc.CreateProfile(r.Context(), *profile)
+		if err != nil {
+			logger.Error().Err(err).Msg("Adding profile failed")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		jsonObj, err := json.Marshal(result)
+		if err != nil {
+			logger.Warn().Err(err).Msg("Failed marshalling json")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Add("Location", fmt.Sprintf("/profile/id/%v", result.ProfileID))
+		w.WriteHeader(http.StatusCreated)
+		w.Write(jsonObj)
+		return
 	}
 }

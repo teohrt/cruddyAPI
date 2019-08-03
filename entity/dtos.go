@@ -3,7 +3,7 @@ package entity
 type Profile struct {
 	ID        string  `json:"id" validate:"omitempty"`
 	FirstName string  `json:"firstName" validate:"omitempty,alpha"`
-	LastName  string  `json:"lasterName" validate:"omitempty,alpha"`
+	LastName  string  `json:"lastName" validate:"omitempty,alpha"`
 	Address   Address `json:"address" validate:"omitempty,dive"`
 	Email     string  `json:"email" validate:"omitempty,email"`
 }

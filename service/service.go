@@ -10,10 +10,10 @@ import (
 )
 
 type Service interface {
-	CreateProfile(ctx context.Context, profile entity.Profile) (*entity.CreateProfileResult, error)
-	GetProfile(ctx context.Context, profileID int) (*entity.Profile, error)
+	CreateProfile(ctx context.Context, profile entity.Profile) (entity.CreateProfileResult, error)
+	GetProfile(ctx context.Context, profileID string) (entity.Profile, error)
 	UpdateProfile(ctx context.Context, profile entity.Profile) error
-	DeleteProfile(ctx context.Context, profileID int) error
+	DeleteProfile(ctx context.Context, profileID string) error
 }
 
 type serviceImpl struct {
@@ -28,4 +28,12 @@ func New(config *dbclient.DBConfig) Service {
 		Client: client,
 		Logger: &logger,
 	}
+}
+
+type ProfileNotFoundError struct {
+	msg string
+}
+
+func (e ProfileNotFoundError) Error() string {
+	return e.msg
 }

@@ -8,7 +8,7 @@ import (
 )
 
 // TODO
-func CreateProfileHandler(svc service.Service) Handler {
+func UpdateProfileHandler(svc service.Service) Handler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "TODO")
 	}

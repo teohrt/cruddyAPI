@@ -19,7 +19,7 @@ func TestNewDBClient(t *testing.T) {
 		AWSRegion:         "us-east-2",
 	}, &logger)
 
-	assert.IsType(t, clientImpl{}, client)
+	assert.IsType(t, ClientImpl{}, client)
 }
 func TestGetItem(t *testing.T) {
 	testCases := []struct {
@@ -54,12 +54,12 @@ func TestGetItem(t *testing.T) {
 	for _, tC := range testCases {
 		logger := zerolog.New(os.Stdout)
 
-		mockClient := clientImpl{
-			dynamoDB: testutils.MockDB{
+		mockClient := ClientImpl{
+			DynamoDB: testutils.MockDB{
 				GetItemOutputToReturn: tC.getItemOutputToReturn,
 				GetItemErrorToReturn:  tC.getItemErrorToReturn,
 			},
-			logger: &logger,
+			Logger: &logger,
 		}
 
 		av, err := mockClient.GetItem(context.Background(), tC.valueName, tC.value)
@@ -100,12 +100,12 @@ func TestUpsertItem(t *testing.T) {
 	for _, tC := range testCases {
 		logger := zerolog.New(os.Stdout)
 
-		clientImpl := clientImpl{
-			dynamoDB: testutils.MockDB{
+		clientImpl := ClientImpl{
+			DynamoDB: testutils.MockDB{
 				PutItemOutputToReturn: tC.queryOutputToReturn,
 				PutItemErrorToReturn:  tC.queryErrorToReturn,
 			},
-			logger: &logger,
+			Logger: &logger,
 		}
 
 		item, err := clientImpl.UpsertItem(context.Background(), tC.in)
@@ -151,12 +151,12 @@ func TestDeleteItem(t *testing.T) {
 	for _, tC := range testCases {
 		logger := zerolog.New(os.Stdout)
 
-		mockClient := clientImpl{
-			dynamoDB: testutils.MockDB{
+		mockClient := ClientImpl{
+			DynamoDB: testutils.MockDB{
 				DeleteItemOutputToReturn: tC.deleteItemOutputToReturn,
 				DeleteItemErrorToReturn:  tC.deleteItemErrorToReturn,
 			},
-			logger: &logger,
+			Logger: &logger,
 		}
 
 		out, err := mockClient.DeleteItem(context.Background(), tC.valueName, tC.value)

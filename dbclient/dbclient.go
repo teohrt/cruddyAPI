@@ -23,10 +23,10 @@ type Client interface {
 	DeleteItem(ctx context.Context, keyName string, value string) (*dynamodb.DeleteItemOutput, error)
 }
 
-type clientImpl struct {
-	dynamoDB  dynamodbiface.DynamoDBAPI
-	tableName string
-	logger    *zerolog.Logger
+type ClientImpl struct {
+	DynamoDB  dynamodbiface.DynamoDBAPI
+	TableName string
+	Logger    *zerolog.Logger
 }
 
 func New(config *Config, logger *zerolog.Logger) Client {
@@ -35,16 +35,16 @@ func New(config *Config, logger *zerolog.Logger) Client {
 		Endpoint: aws.String(config.AWSSessionEndpoint),
 	}))
 
-	return clientImpl{
-		dynamoDB:  dynamodb.New(awsSession),
-		tableName: config.DynamoDBTableName,
-		logger:    logger,
+	return ClientImpl{
+		DynamoDB:  dynamodb.New(awsSession),
+		TableName: config.DynamoDBTableName,
+		Logger:    logger,
 	}
 }
 
-func (db clientImpl) GetItem(ctx context.Context, valueName string, value string) (*map[string]*dynamodb.AttributeValue, error) {
-	result, err := db.dynamoDB.GetItemWithContext(ctx, &dynamodb.GetItemInput{
-		TableName: aws.String(db.tableName),
+func (db ClientImpl) GetItem(ctx context.Context, valueName string, value string) (*map[string]*dynamodb.AttributeValue, error) {
+	result, err := db.DynamoDB.GetItemWithContext(ctx, &dynamodb.GetItemInput{
+		TableName: aws.String(db.TableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			valueName: {
 				S: aws.String(value),
@@ -53,29 +53,29 @@ func (db clientImpl) GetItem(ctx context.Context, valueName string, value string
 	})
 
 	if err != nil {
-		db.logger.Error().Err(err).Msg("GetItem failed")
+		db.Logger.Error().Err(err).Msg("GetItem failed")
 		return nil, err
 	}
 
 	return &result.Item, nil
 }
 
-func (db clientImpl) UpsertItem(ctx context.Context, in interface{}) (*dynamodb.PutItemOutput, error) {
+func (db ClientImpl) UpsertItem(ctx context.Context, in interface{}) (*dynamodb.PutItemOutput, error) {
 	av, err := dynamodbattribute.MarshalMap(in)
 	if err != nil {
-		db.logger.Error().Err(err).Msg("Unable to MarshallMap for PutItem")
+		db.Logger.Error().Err(err).Msg("Unable to MarshallMap for PutItem")
 		return nil, err
 	}
 
-	return db.dynamoDB.PutItemWithContext(ctx, &dynamodb.PutItemInput{
+	return db.DynamoDB.PutItemWithContext(ctx, &dynamodb.PutItemInput{
 		Item:      av,
-		TableName: aws.String(db.tableName),
+		TableName: aws.String(db.TableName),
 	})
 }
 
-func (db clientImpl) DeleteItem(ctx context.Context, keyName string, value string) (*dynamodb.DeleteItemOutput, error) {
-	return db.dynamoDB.DeleteItemWithContext(ctx, &dynamodb.DeleteItemInput{
-		TableName: aws.String(db.tableName),
+func (db ClientImpl) DeleteItem(ctx context.Context, keyName string, value string) (*dynamodb.DeleteItemOutput, error) {
+	return db.DynamoDB.DeleteItemWithContext(ctx, &dynamodb.DeleteItemInput{
+		TableName: aws.String(db.TableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			keyName: {
 				S: aws.String(value),

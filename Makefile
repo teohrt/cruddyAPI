@@ -18,3 +18,6 @@ build:
 	
 clean:
 	rm -f $(BINARY_NAME)
+
+test-ci:
+	go test ./... -race -cover -v 2>&1

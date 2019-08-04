@@ -18,9 +18,9 @@ import (
 func Start() {
 	SERVER_PORT := os.Getenv("_LAMBDA_SERVER_PORT")
 
-	dbconfig := dbclient.DBConfig{}
-	env.Parse(&dbconfig)
-	svc := service.New(&dbconfig)
+	config := dbclient.Config{}
+	env.Parse(&config)
+	svc := service.New(&config)
 	v := validator.New()
 
 	r := mux.NewRouter()

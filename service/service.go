@@ -21,7 +21,7 @@ type serviceImpl struct {
 	Logger *zerolog.Logger
 }
 
-func New(config *dbclient.DBConfig) Service {
+func New(config *dbclient.Config) Service {
 	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 	client := dbclient.New(config, &logger)
 	return serviceImpl{

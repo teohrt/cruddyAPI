@@ -11,7 +11,7 @@ import (
 	"github.com/rs/zerolog"
 )
 
-type DBConfig struct {
+type Config struct {
 	DynamoDBTableName  string `env:"DYNAMODB_TABLE_NAME"`
 	AWSRegion          string `env:"AWS_SESSION_REGION"`
 	AWSSessionEndpoint string `env:"AWS_SESSION_ENDPOINT"`
@@ -29,7 +29,7 @@ type clientImpl struct {
 	logger    *zerolog.Logger
 }
 
-func New(config *DBConfig, logger *zerolog.Logger) Client {
+func New(config *Config, logger *zerolog.Logger) Client {
 	awsSession := session.Must(session.NewSession(&aws.Config{
 		Region:   aws.String(config.AWSRegion),
 		Endpoint: aws.String(config.AWSSessionEndpoint),

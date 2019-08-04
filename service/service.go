@@ -37,3 +37,11 @@ type ProfileNotFoundError struct {
 func (e ProfileNotFoundError) Error() string {
 	return e.msg
 }
+
+type ProfileAlreadyExistsError struct {
+	msg string
+}
+
+func (e ProfileAlreadyExistsError) Error() string {
+	return e.msg
+}

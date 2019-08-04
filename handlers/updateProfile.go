@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 
@@ -12,7 +11,6 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
-// TODO
 func UpdateProfile(svc service.Service, v *validator.Validate) Handler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
@@ -32,6 +30,13 @@ func UpdateProfile(svc service.Service, v *validator.Validate) Handler {
 			return
 		}
 
-		fmt.Fprintf(w, "TODO")
+		if err := svc.UpdateProfile(r.Context(), *profile); err != nil {
+			logger.Error().Err(err).Msg("UpdateProfile failed")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		return
 	}
 }

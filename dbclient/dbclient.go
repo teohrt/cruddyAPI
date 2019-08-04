@@ -20,6 +20,7 @@ type DBConfig struct {
 type Client interface {
 	GetItem(ctx context.Context, valueName string, value string) (*map[string]*dynamodb.AttributeValue, error)
 	UpsertItem(ctx context.Context, in interface{}) (*dynamodb.PutItemOutput, error)
+	DeleteItem(ctx context.Context, keyName string, value string) (*dynamodb.DeleteItemOutput, error)
 }
 
 type clientImpl struct {
@@ -59,7 +60,6 @@ func (db clientImpl) GetItem(ctx context.Context, valueName string, value string
 	return &result.Item, nil
 }
 
-// Converts anything into a dynamo attribute value struct for upsert
 func (db clientImpl) UpsertItem(ctx context.Context, in interface{}) (*dynamodb.PutItemOutput, error) {
 	av, err := dynamodbattribute.MarshalMap(in)
 	if err != nil {
@@ -67,10 +67,19 @@ func (db clientImpl) UpsertItem(ctx context.Context, in interface{}) (*dynamodb.
 		return nil, err
 	}
 
-	input := &dynamodb.PutItemInput{
+	return db.dynamoDB.PutItemWithContext(ctx, &dynamodb.PutItemInput{
 		Item:      av,
 		TableName: aws.String(db.tableName),
-	}
+	})
+}
 
-	return db.dynamoDB.PutItemWithContext(ctx, input)
+func (db clientImpl) DeleteItem(ctx context.Context, keyName string, value string) (*dynamodb.DeleteItemOutput, error) {
+	return db.dynamoDB.DeleteItemWithContext(ctx, &dynamodb.DeleteItemInput{
+		TableName: aws.String(db.tableName),
+		Key: map[string]*dynamodb.AttributeValue{
+			keyName: {
+				S: aws.String(value),
+			},
+		},
+	})
 }

@@ -16,7 +16,7 @@ type Service interface {
 	DeleteProfile(ctx context.Context, profileID string) error
 }
 
-type serviceImpl struct {
+type ServiceImpl struct {
 	Client dbclient.Client
 	Logger *zerolog.Logger
 }
@@ -24,7 +24,7 @@ type serviceImpl struct {
 func New(config *dbclient.Config) Service {
 	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 	client := dbclient.New(config, &logger)
-	return serviceImpl{
+	return ServiceImpl{
 		Client: client,
 		Logger: &logger,
 	}

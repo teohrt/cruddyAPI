@@ -65,7 +65,7 @@ func TestUpdateProfile(t *testing.T) {
 	for _, tC := range testCases {
 		logger := zerolog.New(os.Stdout)
 
-		mockService := serviceImpl{
+		mockService := ServiceImpl{
 			Client: dbclient.ClientImpl{
 				DynamoDB: testutils.MockDB{
 					GetItemOutputToReturn: tC.GetItemOutputToReturn,

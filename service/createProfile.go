@@ -6,7 +6,7 @@ import (
 	"github.com/teohrt/cruddyAPI/entity"
 )
 
-func (svc serviceImpl) CreateProfile(ctx context.Context, profile entity.Profile) (entity.CreateProfileResult, error) {
+func (svc ServiceImpl) CreateProfile(ctx context.Context, profile entity.Profile) (entity.CreateProfileResult, error) {
 	_, err := svc.GetProfile(ctx, profile.ID)
 	if err != nil {
 		switch err.(type) {

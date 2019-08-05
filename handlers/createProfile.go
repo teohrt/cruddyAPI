@@ -13,8 +13,7 @@ import (
 	"github.com/teohrt/cruddyAPI/service"
 )
 
-// TODO
-func CreateProfile(svc service.Service, v *validator.Validate) Handler {
+func CreateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()

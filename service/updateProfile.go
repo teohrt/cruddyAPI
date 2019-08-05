@@ -6,7 +6,7 @@ import (
 	"github.com/teohrt/cruddyAPI/entity"
 )
 
-func (svc serviceImpl) UpdateProfile(ctx context.Context, profile entity.Profile) error {
+func (svc ServiceImpl) UpdateProfile(ctx context.Context, profile entity.Profile) error {
 	_, err := svc.GetProfile(ctx, profile.ID)
 	if err != nil {
 		svc.Logger.Error().Err(err).Msg("UpdateProfile: GetProfile failed")

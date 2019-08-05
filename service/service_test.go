@@ -14,5 +14,5 @@ func TestNewService(t *testing.T) {
 		AWSSessionEndpoint: "a test",
 	})
 
-	assert.IsType(t, serviceImpl{}, svc)
+	assert.IsType(t, ServiceImpl{}, svc)
 }

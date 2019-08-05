@@ -7,7 +7,7 @@ import (
 	"github.com/teohrt/cruddyAPI/entity"
 )
 
-func (svc serviceImpl) GetProfile(ctx context.Context, profileID string) (entity.Profile, error) {
+func (svc ServiceImpl) GetProfile(ctx context.Context, profileID string) (entity.Profile, error) {
 	item, err := svc.Client.GetItem(ctx, "id", profileID)
 	if err != nil {
 		svc.Logger.Error().Err(err).Msg("Searching for ProfileID failed")

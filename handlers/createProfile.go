@@ -34,9 +34,16 @@ func CreateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 
 		result, err := svc.CreateProfile(r.Context(), *profile)
 		if err != nil {
-			logger.Error().Err(err).Msg("Adding profile failed")
-			w.WriteHeader(http.StatusInternalServerError)
-			return
+			switch err.(type) {
+			case service.ProfileAlreadyExistsError:
+				logger.Debug().Err(err).Msg("Profile already exists")
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			default:
+				logger.Error().Err(err).Msg("Adding profile failed")
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
 		}
 
 		jsonObj, err := json.Marshal(result)

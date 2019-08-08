@@ -27,7 +27,10 @@ build-lambda:
 zip:
 	zip -j lambda.zip $(BINARY_NAME)
 
-terraform-apply:
+t-apply:
 	cd infrastructure/terraform ; terraform init ; terraform apply
 
-deploy: clean build-lambda zip terraform-apply
+t-destroy:
+	cd infrastructure/terraform ; terraform destroy
+
+deploy: clean build-lambda zip t-apply

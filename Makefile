@@ -2,7 +2,6 @@ GOCMD=go
 GOBUILD=$(GOCMD) build
 BINARY_NAME=cruddyAPI
 LOCAL_PORT="8002"
-BUCKET="teohrt"
 
 BASE_ENV_VALS := _LAMBDA_SERVER_PORT=$(LOCAL_PORT) \
 		LOG_LEVEL="debug" \
@@ -28,7 +27,7 @@ build-lambda:
 zip:
 	zip -j lambda.zip $(BINARY_NAME)
 
-upload:
-	aws s3 cp lambda.zip s3://$(BUCKET)/
+terraform-apply:
+	cd infrastructure/terraform ; terraform init ; terraform apply
 
-upload-lambda: clean build-lambda zip upload
+deploy: clean build-lambda zip terraform-apply

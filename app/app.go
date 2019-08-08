@@ -24,11 +24,11 @@ func Start() {
 	v := validator.New()
 
 	r := mux.NewRouter()
-	s := r.PathPrefix("/cruddyAPI").Subrouter()
-	s.HandleFunc("/profile", handlers.CreateProfile(svc, v)).Methods("POST")
-	s.HandleFunc("/profile/id/{id}", handlers.GetProfile(svc)).Methods("GET")
-	s.HandleFunc("/profile/id/{id}", handlers.UpdateProfile(svc, v)).Methods("PUT")
-	s.HandleFunc("/profile/id/{id}", handlers.DeleteProfile(svc)).Methods("DELETE")
+	s := r.PathPrefix("/cruddyAPI/v1").Subrouter()
+	s.HandleFunc("/profiles", handlers.CreateProfile(svc, v)).Methods(http.MethodPost)
+	s.HandleFunc("/profiles/{id}", handlers.GetProfile(svc)).Methods(http.MethodGet)
+	s.HandleFunc("/profiles/{id}", handlers.UpdateProfile(svc, v)).Methods(http.MethodPut)
+	s.HandleFunc("/profiles/{id}", handlers.DeleteProfile(svc)).Methods(http.MethodDelete)
 
 	fmt.Println("Server listening on port :" + SERVER_PORT)
 	log.Fatal(http.ListenAndServe(":"+SERVER_PORT, r))

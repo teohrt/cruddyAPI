@@ -1,6 +1,7 @@
 cruddyAPI
 .vscode/
 lambda.zip
+infrastructure/terraform/.terraform
 
 # Binaries for programs and plugins
 *.exe

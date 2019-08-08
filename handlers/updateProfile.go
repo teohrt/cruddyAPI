@@ -11,7 +11,7 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
-func UpdateProfile(svc service.Service, v *validator.Validate) Handler {
+func UpdateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()

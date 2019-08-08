@@ -9,7 +9,7 @@ import (
 	"github.com/teohrt/cruddyAPI/service"
 )
 
-func DeleteProfile(svc service.Service) Handler {
+func DeleteProfile(svc service.Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 		params := mux.Vars(r)

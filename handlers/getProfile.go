@@ -10,7 +10,7 @@ import (
 	"github.com/teohrt/cruddyAPI/service"
 )
 
-func GetProfile(svc service.Service) Handler {
+func GetProfile(svc service.Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 		params := mux.Vars(r)

@@ -5,7 +5,7 @@ resource "aws_lambda_function" "cruddyAPI" {
   source_code_hash = "${base64sha256(file("../../lambda.zip"))}"
   runtime          = "go1.x"
   timeout          = "30"
-  role              = "${aws_iam_role.cruddyAPI_lambda.arn}"
+  role             = "${aws_iam_role.cruddyAPI_lambda.arn}"
 
   environment {
     variables = {

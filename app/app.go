@@ -1,11 +1,10 @@
 package app
 
 import (
-	"fmt"
 	"log"
 	"net/http"
-	"os"
 
+	"github.com/apex/gateway"
 	"github.com/caarlos0/env"
 	"github.com/gorilla/mux"
 	"gopkg.in/go-playground/validator.v9"
@@ -16,7 +15,7 @@ import (
 )
 
 func Start() {
-	PORT := os.Getenv("SERVER_PORT")
+	// PORT := os.Getenv("SERVER_PORT")
 
 	config := dbclient.Config{}
 	env.Parse(&config)
@@ -30,6 +29,8 @@ func Start() {
 	s.HandleFunc("/profiles/{id}", handlers.UpdateProfile(svc, v)).Methods(http.MethodPut)
 	s.HandleFunc("/profiles/{id}", handlers.DeleteProfile(svc)).Methods(http.MethodDelete)
 
-	fmt.Println("Server listening on port :" + PORT)
-	log.Fatal(http.ListenAndServe(":"+PORT, r))
+	// fmt.Println("Server running locally and listening on port :" + PORT)
+	// log.Fatal(http.ListenAndServe(":"+PORT, r))
+
+	log.Fatal(gateway.ListenAndServe("", r))
 }

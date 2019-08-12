@@ -6,6 +6,11 @@ resource "aws_api_gateway_rest_api" "cruddyAPI" {
 resource "aws_api_gateway_deployment" "deployment_v1" {
   rest_api_id = "${aws_api_gateway_rest_api.cruddyAPI.id}"
   stage_name  = "v1"
+
+  depends_on = [
+    "aws_api_gateway_integration.cruddyAPI",
+    "aws_api_gateway_integration.ping",
+  ]
 }
 
 resource "aws_api_gateway_resource" "system" {
@@ -45,6 +50,10 @@ resource "aws_api_gateway_integration" "cruddyAPI" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = "${aws_lambda_function.cruddyAPI.invoke_arn}"
+
+  depends_on = [
+    "aws_api_gateway_method.cruddyAPI"
+  ]
 }
 
 resource "aws_api_gateway_method" "ping" {
@@ -65,6 +74,10 @@ resource "aws_api_gateway_integration" "ping" {
   request_templates {
     "application/json" = "{\"statusCode\": 200}"
   }
+
+  depends_on = [
+    "aws_api_gateway_method.ping"
+  ]
 }
 
 resource "aws_api_gateway_integration_response" "ping" {

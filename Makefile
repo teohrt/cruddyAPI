@@ -16,7 +16,7 @@ build:
 	$(GOBUILD)
 	
 clean:
-	rm -f $(BINARY_NAME)
+	rm -f $(BINARY_NAME) lambda.zip
 
 test-ci:
 	go test ./... -race -cover -v 2>&1
@@ -27,10 +27,8 @@ build-lambda:
 zip:
 	zip -j lambda.zip $(BINARY_NAME)
 
-t-apply:
-	cd infrastructure/terraform ; terraform init ; terraform apply
-
-t-destroy:
+destroy:
 	cd infrastructure/terraform ; terraform destroy
 
-deploy: clean build-lambda zip t-apply
+deploy: clean build-lambda zip
+	cd infrastructure/terraform ; terraform init ; terraform apply

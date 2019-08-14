@@ -11,6 +11,7 @@ import (
 
 	"github.com/teohrt/cruddyAPI/entity"
 	"github.com/teohrt/cruddyAPI/service"
+	"github.com/teohrt/cruddyAPI/utils"
 )
 
 func CreateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc {
@@ -22,13 +23,13 @@ func CreateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 		profile := new(entity.Profile)
 		if err := decoder.Decode(profile); err != nil {
 			logger.Debug().Err(err).Msg("Bad req body")
-			w.WriteHeader(http.StatusBadRequest)
+			utils.RespondWithError("Bad req body", err, http.StatusBadRequest, w)
 			return
 		}
 
 		if err := validateProfile(profile, v); err != nil {
 			logger.Debug().Err(err).Msg("Profile validation failed")
-			w.WriteHeader(http.StatusBadRequest)
+			utils.RespondWithError("Profile validation failed", err, http.StatusBadRequest, w)
 			return
 		}
 
@@ -37,11 +38,11 @@ func CreateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 			switch err.(type) {
 			case service.ProfileAlreadyExistsError:
 				logger.Debug().Err(err).Msg("Profile already exists")
-				w.WriteHeader(http.StatusBadRequest)
+				utils.RespondWithError("Profile already exists", err, http.StatusBadRequest, w)
 				return
 			default:
 				logger.Error().Err(err).Msg("Adding profile failed")
-				w.WriteHeader(http.StatusInternalServerError)
+				utils.RespondWithError("Adding profile failed", err, http.StatusInternalServerError, w)
 				return
 			}
 		}
@@ -49,7 +50,7 @@ func CreateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 		jsonObj, err := json.Marshal(result)
 		if err != nil {
 			logger.Warn().Err(err).Msg("Failed marshalling json")
-			w.WriteHeader(http.StatusInternalServerError)
+			utils.RespondWithError("Failed marshalling json", err, http.StatusInternalServerError, w)
 			return
 		}
 

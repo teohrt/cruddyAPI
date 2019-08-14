@@ -38,7 +38,7 @@ func TestDeleteProfileHandler(t *testing.T) {
 			profileID:                  "123",
 			deleteItemErrorToReturn:    errors.New("Puke"),
 			expectedStatusCode:         500,
-			expectedResponseBodyResult: "",
+			expectedResponseBodyResult: "{\"Message\":\"DeleteProfile failed\",\"Error\":\"Puke\"}",
 		},
 	}
 

@@ -8,6 +8,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/teohrt/cruddyAPI/entity"
 	"github.com/teohrt/cruddyAPI/service"
+	"github.com/teohrt/cruddyAPI/utils"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -20,19 +21,19 @@ func UpdateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 		profile := new(entity.Profile)
 		if err := decoder.Decode(profile); err != nil {
 			logger.Debug().Err(err).Msg("Bad req body")
-			w.WriteHeader(http.StatusBadRequest)
+			utils.RespondWithError("Bad req body", err, http.StatusBadRequest, w)
 			return
 		}
 
 		if err := validateProfile(profile, v); err != nil {
 			logger.Debug().Err(err).Msg("Profile validation failed")
-			w.WriteHeader(http.StatusBadRequest)
+			utils.RespondWithError("Profile validation failed", err, http.StatusBadRequest, w)
 			return
 		}
 
 		if err := svc.UpdateProfile(r.Context(), *profile); err != nil {
 			logger.Error().Err(err).Msg("UpdateProfile failed")
-			w.WriteHeader(http.StatusInternalServerError)
+			utils.RespondWithError("UpdateProfile failed", err, http.StatusInternalServerError, w)
 			return
 		}
 

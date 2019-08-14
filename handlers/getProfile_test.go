@@ -59,7 +59,7 @@ func TestGetProfileHandler(t *testing.T) {
 			getItemReturnObject:        nil,
 			getItemErrorToReturn:       errors.New("puke"),
 			expectedStatusCode:         500,
-			expectedResponseBodyResult: "{\"Message\":\"Get profile failed\",\"Error\":\"puke\"}",
+			expectedResponseBodyResult: "{\"status\":\"Internal Server Error\",\"message\":\"Get profile failed\",\"error\":\"puke\"}",
 		},
 		{
 			description:                "DB Error - GetProfile failed",
@@ -68,7 +68,7 @@ func TestGetProfileHandler(t *testing.T) {
 			getItemReturnObject:        entity.Profile{},
 			getItemErrorToReturn:       nil,
 			expectedStatusCode:         500,
-			expectedResponseBodyResult: "{\"Message\":\"Get profile failed\",\"Error\":\"Could not find profile associated with: \"}",
+			expectedResponseBodyResult: "{\"status\":\"Internal Server Error\",\"message\":\"Get profile failed\",\"error\":\"Could not find profile associated with: \"}",
 		},
 	}
 

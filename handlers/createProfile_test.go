@@ -68,7 +68,7 @@ func TestCreateProfileHandler(t *testing.T) {
 			putItemOutputToReturn:      nil,
 			putItemErrorToReturn:       nil,
 			expectedStatusCode:         400,
-			expectedResponseBodyResult: "{\"Message\":\"Bad req body\",\"Error\":\"invalid character 'p' looking for beginning of value\"}",
+			expectedResponseBodyResult: "{\"status\":\"Bad Request\",\"message\":\"Bad req body\",\"error\":\"invalid character 'p' looking for beginning of value\"}",
 		},
 		{
 			description:                "Req body validation failed - firstname is not alpha",
@@ -79,7 +79,7 @@ func TestCreateProfileHandler(t *testing.T) {
 			putItemOutputToReturn:      nil,
 			putItemErrorToReturn:       nil,
 			expectedStatusCode:         400,
-			expectedResponseBodyResult: "{\"Message\":\"Profile validation failed\",\"Error\":\"Key: 'Profile.FirstName' Error:Field validation for 'FirstName' failed on the 'alpha' tag\"}",
+			expectedResponseBodyResult: "{\"status\":\"Bad Request\",\"message\":\"Profile validation failed\",\"error\":\"Key: 'Profile.FirstName' Error:Field validation for 'FirstName' failed on the 'alpha' tag\"}",
 		},
 		{
 			description:                "Req body validation failed - bad email",
@@ -90,7 +90,7 @@ func TestCreateProfileHandler(t *testing.T) {
 			putItemOutputToReturn:      nil,
 			putItemErrorToReturn:       nil,
 			expectedStatusCode:         400,
-			expectedResponseBodyResult: "{\"Message\":\"Profile validation failed\",\"Error\":\"Key: 'Profile.Email' Error:Field validation for 'Email' failed on the 'email' tag\"}",
+			expectedResponseBodyResult: "{\"status\":\"Bad Request\",\"message\":\"Profile validation failed\",\"error\":\"Key: 'Profile.Email' Error:Field validation for 'Email' failed on the 'email' tag\"}",
 		},
 		{
 			description: "CreateProfile service fails - pukes on prexisting profile",
@@ -112,7 +112,7 @@ func TestCreateProfileHandler(t *testing.T) {
 			putItemOutputToReturn:      &dynamodb.PutItemOutput{},
 			putItemErrorToReturn:       nil,
 			expectedStatusCode:         400,
-			expectedResponseBodyResult: "{\"Message\":\"Profile already exists\",\"Error\":\"Can not create profile. Already exists\"}",
+			expectedResponseBodyResult: "{\"status\":\"Bad Request\",\"message\":\"Profile already exists\",\"error\":\"Can not create profile. Already exists\"}",
 		},
 		{
 			description: "CreateProfile service fails - GetItem pukes",
@@ -134,7 +134,7 @@ func TestCreateProfileHandler(t *testing.T) {
 			putItemOutputToReturn:      &dynamodb.PutItemOutput{},
 			putItemErrorToReturn:       nil,
 			expectedStatusCode:         500,
-			expectedResponseBodyResult: "{\"Message\":\"Adding profile failed\",\"Error\":\"puke\"}",
+			expectedResponseBodyResult: "{\"status\":\"Internal Server Error\",\"message\":\"Adding profile failed\",\"error\":\"puke\"}",
 		},
 		{
 			description: "CreateProfile service fails - PutItem pukes",
@@ -156,7 +156,7 @@ func TestCreateProfileHandler(t *testing.T) {
 			putItemOutputToReturn:      nil,
 			putItemErrorToReturn:       errors.New("puke"),
 			expectedStatusCode:         500,
-			expectedResponseBodyResult: "{\"Message\":\"Adding profile failed\",\"Error\":\"puke\"}",
+			expectedResponseBodyResult: "{\"status\":\"Internal Server Error\",\"message\":\"Adding profile failed\",\"error\":\"puke\"}",
 		},
 	}
 

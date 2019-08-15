@@ -9,7 +9,7 @@ type ProfileData struct {
 	FirstName string  `json:"firstName" validate:"omitempty,alpha"`
 	LastName  string  `json:"lastName" validate:"omitempty,alpha"`
 	Address   Address `json:"address" validate:"omitempty,dive"`
-	Email     string  `json:"email" validate:"omitempty,email"`
+	Email     string  `json:"email" validate:"required,email"`
 }
 
 type Address struct {

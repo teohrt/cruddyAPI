@@ -19,6 +19,7 @@ func RespondWithError(msg string, err error, statusCode int, w http.ResponseWrit
 		Err:    err.Error(),
 	})
 
+	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	w.Write(jsonObj)
 }

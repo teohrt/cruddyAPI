@@ -37,6 +37,7 @@ func UpdateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 			return
 		}
 
+		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		return
 	}

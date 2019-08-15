@@ -54,6 +54,7 @@ func CreateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 			return
 		}
 
+		w.Header().Add("Content-Type", "application/json")
 		w.Header().Add("Location", fmt.Sprintf("/profiles/%v", result.ProfileID))
 		w.WriteHeader(http.StatusCreated)
 		w.Write(jsonObj)

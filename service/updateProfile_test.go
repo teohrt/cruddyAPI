@@ -15,10 +15,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const (
+	EMAIL      = "foo@bar.com"
+	EMAIL_HASH = "0c7e6a405862e402eb76a70f8a26fc732d07c32931e9fae9ab1582911d2e8a3b"
+)
+
 func TestUpdateProfile(t *testing.T) {
 	testCases := []struct {
 		description           string
-		profile               entity.Profile
+		profileID             string
+		profileData           entity.ProfileData
 		GetItemOutputToReturn *dynamodb.GetItemOutput
 		GetItemErrorToReturn  error
 		GetItemReturnObject   interface{}
@@ -28,15 +34,17 @@ func TestUpdateProfile(t *testing.T) {
 	}{
 		{
 			description:           "Happy path",
-			profile:               entity.Profile{ID: "123"},
+			profileID:             EMAIL_HASH,
+			profileData:           entity.ProfileData{Email: EMAIL},
 			GetItemOutputToReturn: &dynamodb.GetItemOutput{},
 			GetItemErrorToReturn:  nil,
-			GetItemReturnObject:   entity.Profile{ID: "123"},
+			GetItemReturnObject:   entity.Profile{ID: EMAIL_HASH},
 			expectedErrorString:   "",
 		},
 		{
 			description:           "Unmarshal error : Profile db had incompatible object",
-			profile:               entity.Profile{ID: "123"},
+			profileID:             EMAIL_HASH,
+			profileData:           entity.ProfileData{Email: "foo@bar.com"},
 			GetItemOutputToReturn: &dynamodb.GetItemOutput{},
 			GetItemErrorToReturn:  nil,
 			GetItemReturnObject:   brokenProfileData{ID: false},
@@ -44,21 +52,34 @@ func TestUpdateProfile(t *testing.T) {
 		},
 		{
 			description:           "ID not found",
-			profile:               entity.Profile{ID: "123"},
+			profileID:             EMAIL_HASH,
+			profileData:           entity.ProfileData{Email: EMAIL},
 			GetItemOutputToReturn: &dynamodb.GetItemOutput{},
 			GetItemErrorToReturn:  nil,
 			GetItemReturnObject:   entity.Profile{ID: ""},
-			expectedErrorString:   "Could not find profile associated with: 123",
+			expectedErrorString:   "Could not find profile associated with: " + EMAIL_HASH,
 		},
 		{
 			description:           "Profile UpsertItem puked",
-			profile:               entity.Profile{ID: "123"},
+			profileID:             EMAIL_HASH,
+			profileData:           entity.ProfileData{Email: EMAIL},
 			GetItemOutputToReturn: &dynamodb.GetItemOutput{},
 			GetItemErrorToReturn:  nil,
-			GetItemReturnObject:   entity.Profile{ID: "123"},
+			GetItemReturnObject:   entity.Profile{ID: EMAIL_HASH},
 			PutItemOutputToReturn: nil,
 			PutItemErrorToReturn:  errors.New("puke"),
 			expectedErrorString:   "puke",
+		},
+		{
+			description:           "UpdateProfile puked - Email inconsistent with pid",
+			profileID:             "bad-profileID",
+			profileData:           entity.ProfileData{Email: EMAIL},
+			GetItemOutputToReturn: nil,
+			GetItemErrorToReturn:  nil,
+			GetItemReturnObject:   nil,
+			PutItemOutputToReturn: nil,
+			PutItemErrorToReturn:  nil,
+			expectedErrorString:   "Email inconsistent with ProfileID",
 		},
 	}
 
@@ -79,7 +100,7 @@ func TestUpdateProfile(t *testing.T) {
 			Logger: &logger,
 		}
 
-		err := mockService.UpdateProfile(context.Background(), tC.profile)
+		err := mockService.UpdateProfile(context.Background(), tC.profileData, tC.profileID)
 
 		if tC.expectedErrorString != "" {
 			assert.Error(t, err)

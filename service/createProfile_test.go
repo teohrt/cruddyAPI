@@ -21,7 +21,7 @@ import (
 func TestCreateProfile(t *testing.T) {
 	testCases := []struct {
 		description           string
-		profile               entity.Profile
+		profile               entity.ProfileData
 		putItemOutputToReturn *dynamodb.PutItemOutput
 		putItemErrorToReturn  error
 		getItemOutput         *dynamodb.GetItemOutput
@@ -32,18 +32,18 @@ func TestCreateProfile(t *testing.T) {
 	}{
 		{
 			description:           "Happy Path",
-			profile:               entity.Profile{ID: "123"},
+			profile:               entity.ProfileData{Email: EMAIL},
 			putItemOutputToReturn: &dynamodb.PutItemOutput{},
 			putItemErrorToReturn:  nil,
 			getItemOutput:         nil,
 			getItemReturnObject:   nil,
 			getItemErrorToReturn:  ProfileNotFoundError{"profile not found"},
 			expectedErrorString:   "",
-			expectedResultString:  fmt.Sprintf("{\"ProfileID\":\"%s\"}\n", "123"),
+			expectedResultString:  fmt.Sprintf("{\"ProfileID\":\"%s\"}\n", EMAIL_HASH),
 		},
 		{
 			description:           "DB error - UpsertItem Puked",
-			profile:               entity.Profile{ID: "123"},
+			profile:               entity.ProfileData{Email: EMAIL},
 			putItemOutputToReturn: &dynamodb.PutItemOutput{},
 			putItemErrorToReturn:  errors.New("puke"),
 			getItemOutput:         nil,
@@ -54,18 +54,18 @@ func TestCreateProfile(t *testing.T) {
 		},
 		{
 			description:           "DB error - GetItem Puked",
-			profile:               entity.Profile{ID: "123"},
+			profile:               entity.ProfileData{Email: "foo@bar.com"},
 			putItemOutputToReturn: nil,
 			putItemErrorToReturn:  nil,
 			getItemOutput:         &dynamodb.GetItemOutput{},
-			getItemReturnObject:   entity.Profile{ID: "123"},
+			getItemReturnObject:   entity.Profile{ID: EMAIL_HASH},
 			getItemErrorToReturn:  nil,
 			expectedErrorString:   "Can not create profile. Already exists",
 			expectedResultString:  fmt.Sprintf("{\"ProfileID\":\"%s\"}\n", ""),
 		},
 		{
 			description:           "Create failed - profile already exists",
-			profile:               entity.Profile{ID: "123"},
+			profile:               entity.ProfileData{Email: EMAIL},
 			putItemOutputToReturn: nil,
 			putItemErrorToReturn:  nil,
 			getItemOutput:         nil,

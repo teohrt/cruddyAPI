@@ -10,13 +10,13 @@ import (
 	"os"
 	"testing"
 
+	"github.com/gorilla/mux"
 	"github.com/teohrt/cruddyAPI/dbclient"
 	"github.com/teohrt/cruddyAPI/entity"
 	"github.com/teohrt/cruddyAPI/service"
 	"github.com/teohrt/cruddyAPI/testutils"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/go-chi/chi"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/go-playground/validator.v9"
@@ -25,6 +25,7 @@ import (
 func TestUpdateProfile(t *testing.T) {
 	testCases := []struct {
 		description                string
+		profileID                  string
 		bodyToSend                 string
 		expectedStatusCode         int
 		expectedResponseBodyResult string
@@ -35,16 +36,18 @@ func TestUpdateProfile(t *testing.T) {
 	}{
 		{
 			description:                "Happy path",
-			bodyToSend:                 `{"id": "123", "email":"foo@bar.com"}`,
+			profileID:                  EMAIL_HASH,
+			bodyToSend:                 `{"email":"` + EMAIL + `"}`,
 			expectedStatusCode:         200,
 			expectedResponseBodyResult: "",
 			PutItemErrorToReturn:       nil,
 			GetItemOutputToReturn:      &dynamodb.GetItemOutput{},
-			GetItemReturnObject:        entity.Profile{ID: "123"},
+			GetItemReturnObject:        entity.Profile{ID: EMAIL_HASH},
 			GetItemErrorToReturn:       nil,
 		},
 		{
 			description:                "Bad req body",
+			profileID:                  EMAIL_HASH,
 			bodyToSend:                 `rtr39gk402apg"}`,
 			expectedStatusCode:         400,
 			expectedResponseBodyResult: "{\"status\":\"Bad Request\",\"message\":\"Bad req body\",\"error\":\"invalid character 'r' looking for beginning of value\"}",
@@ -54,10 +57,11 @@ func TestUpdateProfile(t *testing.T) {
 			GetItemErrorToReturn:       nil,
 		},
 		{
-			description:                "Validation error - missing required attributes - ID",
-			bodyToSend:                 `{"email":"foo@bar.com"}`,
+			description:                "Validation error - missing required attributes - Email",
+			profileID:                  EMAIL_HASH,
+			bodyToSend:                 `{"email":""}`,
 			expectedStatusCode:         400,
-			expectedResponseBodyResult: "{\"status\":\"Bad Request\",\"message\":\"Profile validation failed\",\"error\":\"Key: 'Profile.ID' Error:Field validation for 'ID' failed on the 'required' tag\"}",
+			expectedResponseBodyResult: "{\"status\":\"Bad Request\",\"message\":\"Profile validation failed\",\"error\":\"Key: 'ProfileData.Email' Error:Field validation for 'Email' failed on the 'required' tag\"}",
 			PutItemErrorToReturn:       nil,
 			GetItemOutputToReturn:      nil,
 			GetItemReturnObject:        nil,
@@ -65,7 +69,8 @@ func TestUpdateProfile(t *testing.T) {
 		},
 		{
 			description:                "DB Error - PutItem failed",
-			bodyToSend:                 `{"id": "123", "email":"foo@bar.com"}`,
+			profileID:                  EMAIL_HASH,
+			bodyToSend:                 `{"email":"` + EMAIL + `"}`,
 			expectedStatusCode:         500,
 			expectedResponseBodyResult: "{\"status\":\"Internal Server Error\",\"message\":\"UpdateProfile failed\",\"error\":\"puke\"}",
 			PutItemErrorToReturn:       errors.New("puke"),
@@ -93,12 +98,15 @@ func TestUpdateProfile(t *testing.T) {
 				Logger: &logger,
 			}
 
-			r := chi.NewRouter()
-			r.Put("/test", UpdateProfile(mockService, validator.New()))
+			r := mux.NewRouter()
+			s := r.PathPrefix("/test").Subrouter()
+			s.HandleFunc("/{id}", UpdateProfile(mockService, validator.New())).Methods(http.MethodPut)
+
 			ts := httptest.NewServer(r)
 			defer ts.Close()
 
-			req, _ := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/test", ts.URL), bytes.NewReader([]byte(tC.bodyToSend)))
+			req, _ := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/test/%s", ts.URL, tC.profileID), bytes.NewReader([]byte(tC.bodyToSend)))
+
 			res, err := ts.Client().Do(req)
 
 			asserter.NoError(err)

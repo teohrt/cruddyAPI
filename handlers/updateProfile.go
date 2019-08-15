@@ -21,20 +21,20 @@ func UpdateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 		params := mux.Vars(r)
 		profileID := params["id"]
 
-		profile := new(entity.ProfileData)
-		if err := decoder.Decode(profile); err != nil {
+		profileData := new(entity.ProfileData)
+		if err := decoder.Decode(profileData); err != nil {
 			logger.Debug().Err(err).Msg("Bad req body")
 			utils.RespondWithError("Bad req body", err, http.StatusBadRequest, w)
 			return
 		}
 
-		if err := validateProfile(profile, v); err != nil {
+		if err := validateProfile(profileData, v); err != nil {
 			logger.Debug().Err(err).Msg("Profile validation failed")
 			utils.RespondWithError("Profile validation failed", err, http.StatusBadRequest, w)
 			return
 		}
 
-		if err := svc.UpdateProfile(r.Context(), *profile, profileID); err != nil {
+		if err := svc.UpdateProfile(r.Context(), *profileData, profileID); err != nil {
 			logger.Error().Err(err).Msg("UpdateProfile failed")
 			utils.RespondWithError("UpdateProfile failed", err, http.StatusInternalServerError, w)
 			return

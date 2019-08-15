@@ -22,6 +22,11 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
+const (
+	EMAIL      = "foo@bar.com"
+	EMAIL_HASH = "0c7e6a405862e402eb76a70f8a26fc732d07c32931e9fae9ab1582911d2e8a3b"
+)
+
 func TestCreateProfileHandler(t *testing.T) {
 	testCases := []struct {
 		description string
@@ -40,7 +45,6 @@ func TestCreateProfileHandler(t *testing.T) {
 		{
 			description: "Happy path",
 			bodyToSend: `{
-				"id": "123",
 				"firstName": "Trace",
 				"lastName": "Ohrt",
 				"address": {
@@ -49,15 +53,15 @@ func TestCreateProfileHandler(t *testing.T) {
 					"state": "California",
 					"zipcode": "95014"
 				},
-				"email": "teohrt18@gmail.com"
-			}`,
+				"email": "` + EMAIL + `"
+				}`,
 			getItemOutputToReturn:      &dynamodb.GetItemOutput{},
 			getItemReturnObject:        entity.Profile{ID: ""},
 			getItemErrorToReturn:       nil,
 			putItemOutputToReturn:      &dynamodb.PutItemOutput{},
 			putItemErrorToReturn:       nil,
 			expectedStatusCode:         201,
-			expectedResponseBodyResult: `{"ProfileID":"123"}`,
+			expectedResponseBodyResult: `{"ProfileID":"` + EMAIL_HASH + `"}`,
 		},
 		{
 			description:                "Bady req body",
@@ -72,30 +76,29 @@ func TestCreateProfileHandler(t *testing.T) {
 		},
 		{
 			description:                "Req body validation failed - firstname is not alpha",
-			bodyToSend:                 `{"ID": "123", "firstName": "trace3"}`,
+			bodyToSend:                 `{"firstName": "trace3", "email": "` + EMAIL + `"}`,
 			getItemOutputToReturn:      nil,
 			getItemReturnObject:        nil,
 			getItemErrorToReturn:       nil,
 			putItemOutputToReturn:      nil,
 			putItemErrorToReturn:       nil,
 			expectedStatusCode:         400,
-			expectedResponseBodyResult: "{\"status\":\"Bad Request\",\"message\":\"Profile validation failed\",\"error\":\"Key: 'Profile.FirstName' Error:Field validation for 'FirstName' failed on the 'alpha' tag\"}",
+			expectedResponseBodyResult: "{\"status\":\"Bad Request\",\"message\":\"Profile validation failed\",\"error\":\"Key: 'ProfileData.FirstName' Error:Field validation for 'FirstName' failed on the 'alpha' tag\"}",
 		},
 		{
 			description:                "Req body validation failed - bad email",
-			bodyToSend:                 `{"ID": "123", "email": "foobar.com"}`,
+			bodyToSend:                 `{"email": "foobar.com"}`,
 			getItemOutputToReturn:      nil,
 			getItemReturnObject:        nil,
 			getItemErrorToReturn:       nil,
 			putItemOutputToReturn:      nil,
 			putItemErrorToReturn:       nil,
 			expectedStatusCode:         400,
-			expectedResponseBodyResult: "{\"status\":\"Bad Request\",\"message\":\"Profile validation failed\",\"error\":\"Key: 'Profile.Email' Error:Field validation for 'Email' failed on the 'email' tag\"}",
+			expectedResponseBodyResult: "{\"status\":\"Bad Request\",\"message\":\"Profile validation failed\",\"error\":\"Key: 'ProfileData.Email' Error:Field validation for 'Email' failed on the 'email' tag\"}",
 		},
 		{
 			description: "CreateProfile service fails - pukes on prexisting profile",
 			bodyToSend: `{
-				"id": "123",
 				"firstName": "Trace",
 				"lastName": "Ohrt",
 				"address": {
@@ -104,10 +107,10 @@ func TestCreateProfileHandler(t *testing.T) {
 					"state": "California",
 					"zipcode": "95014"
 				},
-				"email": "teohrt18@gmail.com"
-			}`,
+				"email": "` + EMAIL + `"
+				}`,
 			getItemOutputToReturn:      &dynamodb.GetItemOutput{},
-			getItemReturnObject:        entity.Profile{ID: "123"},
+			getItemReturnObject:        entity.Profile{ID: EMAIL_HASH},
 			getItemErrorToReturn:       nil,
 			putItemOutputToReturn:      &dynamodb.PutItemOutput{},
 			putItemErrorToReturn:       nil,
@@ -117,7 +120,6 @@ func TestCreateProfileHandler(t *testing.T) {
 		{
 			description: "CreateProfile service fails - GetItem pukes",
 			bodyToSend: `{
-				"id": "123",
 				"firstName": "Trace",
 				"lastName": "Ohrt",
 				"address": {
@@ -126,8 +128,8 @@ func TestCreateProfileHandler(t *testing.T) {
 					"state": "California",
 					"zipcode": "95014"
 				},
-				"email": "teohrt18@gmail.com"
-			}`,
+				"email": "` + EMAIL + `"
+				}`,
 			getItemOutputToReturn:      &dynamodb.GetItemOutput{},
 			getItemReturnObject:        nil,
 			getItemErrorToReturn:       errors.New("puke"),
@@ -139,7 +141,6 @@ func TestCreateProfileHandler(t *testing.T) {
 		{
 			description: "CreateProfile service fails - PutItem pukes",
 			bodyToSend: `{
-				"id": "123",
 				"firstName": "Trace",
 				"lastName": "Ohrt",
 				"address": {
@@ -148,8 +149,8 @@ func TestCreateProfileHandler(t *testing.T) {
 					"state": "California",
 					"zipcode": "95014"
 				},
-				"email": "teohrt18@gmail.com"
-			}`,
+				"email": "` + EMAIL + `"
+				}`,
 			getItemOutputToReturn:      &dynamodb.GetItemOutput{},
 			getItemReturnObject:        entity.Profile{ID: ""},
 			getItemErrorToReturn:       nil,

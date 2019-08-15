@@ -37,16 +37,18 @@ func TestGetProfileHandler(t *testing.T) {
 			profileID:             "123",
 			getItemOutputToReturn: &dynamodb.GetItemOutput{},
 			getItemReturnObject: entity.Profile{
-				ID:        "123",
-				FirstName: "Trace",
-				LastName:  "Ohrt",
-				Address: entity.Address{
-					Street:  "175 Calvert Dr",
-					City:    "Cupertino",
-					State:   "CA",
-					ZipCode: "95014",
+				ID: "123",
+				ProfileData: entity.ProfileData{
+					FirstName: "Trace",
+					LastName:  "Ohrt",
+					Address: entity.Address{
+						Street:  "175 Calvert Dr",
+						City:    "Cupertino",
+						State:   "CA",
+						ZipCode: "95014",
+					},
+					Email: "teohrt18@gmail.com",
 				},
-				Email: "teohrt18@gmail.com",
 			},
 			getItemErrorToReturn:       nil,
 			expectedStatusCode:         200,

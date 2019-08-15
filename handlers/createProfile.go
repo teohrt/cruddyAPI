@@ -20,7 +20,7 @@ func CreateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 		decoder := json.NewDecoder(r.Body)
 
-		profile := new(entity.Profile)
+		profile := new(entity.ProfileData)
 		if err := decoder.Decode(profile); err != nil {
 			logger.Debug().Err(err).Msg("Bad req body")
 			utils.RespondWithError("Bad req body", err, http.StatusBadRequest, w)

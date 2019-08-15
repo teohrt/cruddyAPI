@@ -10,9 +10,9 @@ import (
 )
 
 type Service interface {
-	CreateProfile(ctx context.Context, profile entity.Profile) (entity.CreateProfileResult, error)
+	CreateProfile(ctx context.Context, profile entity.ProfileData) (entity.CreateProfileResult, error)
 	GetProfile(ctx context.Context, profileID string) (entity.Profile, error)
-	UpdateProfile(ctx context.Context, profile entity.Profile) error
+	UpdateProfile(ctx context.Context, profile entity.ProfileData, profileID string) error
 	DeleteProfile(ctx context.Context, profileID string) error
 }
 
@@ -43,5 +43,13 @@ type ProfileAlreadyExistsError struct {
 }
 
 func (e ProfileAlreadyExistsError) Error() string {
+	return e.msg
+}
+
+type EmailIncsonsistentWithProfileIDError struct {
+	msg string
+}
+
+func (e EmailIncsonsistentWithProfileIDError) Error() string {
 	return e.msg
 }

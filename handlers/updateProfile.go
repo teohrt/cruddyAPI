@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gorilla/mux"
 	"github.com/rs/zerolog"
 	"github.com/teohrt/cruddyAPI/entity"
 	"github.com/teohrt/cruddyAPI/service"
@@ -17,8 +18,10 @@ func UpdateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 		defer r.Body.Close()
 		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 		decoder := json.NewDecoder(r.Body)
+		params := mux.Vars(r)
+		profileID := params["id"]
 
-		profile := new(entity.Profile)
+		profile := new(entity.ProfileData)
 		if err := decoder.Decode(profile); err != nil {
 			logger.Debug().Err(err).Msg("Bad req body")
 			utils.RespondWithError("Bad req body", err, http.StatusBadRequest, w)
@@ -31,7 +34,7 @@ func UpdateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 			return
 		}
 
-		if err := svc.UpdateProfile(r.Context(), *profile); err != nil {
+		if err := svc.UpdateProfile(r.Context(), *profile, profileID); err != nil {
 			logger.Error().Err(err).Msg("UpdateProfile failed")
 			utils.RespondWithError("UpdateProfile failed", err, http.StatusInternalServerError, w)
 			return

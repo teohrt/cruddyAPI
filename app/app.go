@@ -16,21 +16,24 @@ import (
 
 func Start() {
 	// PORT := os.Getenv("SERVER_PORT")
-
 	config := dbclient.Config{}
 	env.Parse(&config)
 	svc := service.New(&config)
 	v := validator.New()
 
-	r := mux.NewRouter()
-	s := r.PathPrefix("/cruddyAPI").Subrouter()
-	s.HandleFunc("/profiles", handlers.CreateProfile(svc, v)).Methods(http.MethodPost)
-	s.HandleFunc("/profiles/{id}", handlers.GetProfile(svc)).Methods(http.MethodGet)
-	s.HandleFunc("/profiles/{id}", handlers.UpdateProfile(svc, v)).Methods(http.MethodPut)
-	s.HandleFunc("/profiles/{id}", handlers.DeleteProfile(svc)).Methods(http.MethodDelete)
+	router := mux.NewRouter()
+
+	subRouter := router.PathPrefix("/health").Subrouter()
+	subRouter.HandleFunc("/ping", handlers.Health()).Methods(http.MethodGet)
+
+	subRouter = router.PathPrefix("/cruddyAPI").Subrouter()
+	subRouter.HandleFunc("/profiles", handlers.CreateProfile(svc, v)).Methods(http.MethodPost)
+	subRouter.HandleFunc("/profiles/{id}", handlers.GetProfile(svc)).Methods(http.MethodGet)
+	subRouter.HandleFunc("/profiles/{id}", handlers.UpdateProfile(svc, v)).Methods(http.MethodPut)
+	subRouter.HandleFunc("/profiles/{id}", handlers.DeleteProfile(svc)).Methods(http.MethodDelete)
 
 	// fmt.Println("Server running locally and listening on port :" + PORT)
-	// log.Fatal(http.ListenAndServe(":"+PORT, r))
+	// log.Fatal(http.ListenAndServe(":"+PORT, router))
 
-	log.Fatal(gateway.ListenAndServe("", r))
+	log.Fatal(gateway.ListenAndServe("", router))
 }

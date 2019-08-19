@@ -1,17 +1,23 @@
-cruddyAPI
-.vscode/
-lambda.zip
-infrastructure/terraform/.terraform
-
 # Binaries for programs and plugins
+cruddyAPI
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
 
+# Compressed
+lambda.zip
+
 # Test binary, build with `go test -c`
 *.test
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Terraform
+.terraform/
+*tfstate*
+
+# Editors
+.vscode/

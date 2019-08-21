@@ -4,14 +4,16 @@
 The purpose of this RESTful CRUD API is to manage profile data.
 
 ## Routes
-* Create profile
-    * POST https://aws-endpoint/v1/cruddyAPI/profiles 
-* Read / retrieve profile
-    * GET https://aws-endpoint/v1/cruddyAPI/profiles/{id} 
-* Update profile
-    * PUT https://aws-endpoint/v1/cruddyAPI/profiles/{id}
-* Delete profile
-    * DELETE https://aws-endpoint/v1/cruddyAPI/profiles/{id}
+* [Create profile](contracts/createProfileContract.md)
+    * `POST api/v1/cruddyAPI/profiles`
+* [Read / retrieve profile]()
+    * `GET api/v1/cruddyAPI/profiles/{id}`
+* [Update profile]()
+    * `PUT api/v1/cruddyAPI/profiles/{id}`
+* [Delete profile]()
+    * `DELETE api/v1/cruddyAPI/profiles/{id}`
+* [Health]()
+    * `GET api/v1/health/ping`
 
 ## Requirements
 ### Deployment Requirements

@@ -9,11 +9,13 @@ import (
 	"os"
 	"testing"
 
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/gorilla/mux"
 	"github.com/teohrt/cruddyAPI/dbclient"
+	"github.com/teohrt/cruddyAPI/entity"
 	"github.com/teohrt/cruddyAPI/service"
 	"github.com/teohrt/cruddyAPI/testutils"
 
-	"github.com/go-chi/chi"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/assert"
 )
@@ -22,6 +24,9 @@ func TestDeleteProfileHandler(t *testing.T) {
 	testCases := []struct {
 		description                string
 		profileID                  string
+		getItemOutputToReturn      *dynamodb.GetItemOutput
+		getItemReturnObject        interface{}
+		getItemErrorToReturn       error
 		deleteItemErrorToReturn    error
 		expectedStatusCode         int
 		expectedResponseBodyResult string
@@ -29,13 +34,39 @@ func TestDeleteProfileHandler(t *testing.T) {
 		{
 			description:                "Happy path",
 			profileID:                  "123",
+			getItemOutputToReturn:      &dynamodb.GetItemOutput{},
+			getItemReturnObject:        entity.Profile{ID: "123"},
+			getItemErrorToReturn:       nil,
 			deleteItemErrorToReturn:    nil,
 			expectedStatusCode:         200,
 			expectedResponseBodyResult: "",
 		},
 		{
+			description:                "Profile doesn't exist",
+			profileID:                  "123",
+			getItemOutputToReturn:      &dynamodb.GetItemOutput{},
+			getItemReturnObject:        entity.Profile{},
+			getItemErrorToReturn:       nil,
+			deleteItemErrorToReturn:    nil,
+			expectedStatusCode:         404,
+			expectedResponseBodyResult: "{\"status\":\"Not Found\",\"message\":\"Profile not found\",\"error\":\"Could not find profile associated with: 123\"}",
+		},
+		{
+			description:                "DB error - GetProfile puked",
+			profileID:                  "123",
+			getItemOutputToReturn:      &dynamodb.GetItemOutput{},
+			getItemReturnObject:        nil,
+			getItemErrorToReturn:       errors.New("puke"),
+			deleteItemErrorToReturn:    nil,
+			expectedStatusCode:         500,
+			expectedResponseBodyResult: "{\"status\":\"Internal Server Error\",\"message\":\"DeleteProfile failed\",\"error\":\"puke\"}",
+		},
+		{
 			description:                "DB error - DeleteProfile failed",
 			profileID:                  "123",
+			getItemOutputToReturn:      &dynamodb.GetItemOutput{},
+			getItemReturnObject:        entity.Profile{ID: "123"},
+			getItemErrorToReturn:       nil,
 			deleteItemErrorToReturn:    errors.New("Puke"),
 			expectedStatusCode:         500,
 			expectedResponseBodyResult: "{\"status\":\"Internal Server Error\",\"message\":\"DeleteProfile failed\",\"error\":\"Puke\"}",
@@ -51,14 +82,20 @@ func TestDeleteProfileHandler(t *testing.T) {
 				Client: dbclient.ClientImpl{
 					DynamoDB: testutils.MockDB{
 						DeleteItemErrorToReturn: tC.deleteItemErrorToReturn,
+
+						GetItemOutputToReturn: tC.getItemOutputToReturn,
+						GetItemReturnObject:   tC.getItemReturnObject,
+						GetItemErrorToReturn:  tC.getItemErrorToReturn,
 					},
 					Logger: &logger,
 				},
 				Logger: &logger,
 			}
 
-			r := chi.NewRouter()
-			r.Delete("/test/{id}", DeleteProfile(mockService))
+			r := mux.NewRouter()
+			s := r.PathPrefix("/test").Subrouter()
+			s.HandleFunc("/{id}", DeleteProfile(mockService)).Methods(http.MethodDelete)
+
 			ts := httptest.NewServer(r)
 			defer ts.Close()
 

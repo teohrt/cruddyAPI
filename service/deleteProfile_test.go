@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/teohrt/cruddyAPI/dbclient"
+	"github.com/teohrt/cruddyAPI/entity"
 	"github.com/teohrt/cruddyAPI/testutils"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -18,6 +19,9 @@ func TestDeleteProfile(t *testing.T) {
 	testCases := []struct {
 		description              string
 		id                       string
+		getItemOutputToReturn    *dynamodb.GetItemOutput
+		getItemReturnObject      interface{}
+		getItemErrorToReturn     error
 		deleteItemOutputToReturn *dynamodb.DeleteItemOutput
 		deleteItemErrorToReturn  error
 		expectedErrorString      string
@@ -25,13 +29,39 @@ func TestDeleteProfile(t *testing.T) {
 		{
 			description:              "Happy path",
 			id:                       "123",
+			getItemOutputToReturn:    &dynamodb.GetItemOutput{},
+			getItemReturnObject:      entity.Profile{ID: "123"},
+			getItemErrorToReturn:     nil,
 			deleteItemOutputToReturn: &dynamodb.DeleteItemOutput{},
 			deleteItemErrorToReturn:  nil,
 			expectedErrorString:      "",
 		},
 		{
+			description:              "DB Error- GetProfile found no profile",
+			id:                       "123",
+			getItemOutputToReturn:    &dynamodb.GetItemOutput{},
+			getItemReturnObject:      entity.Profile{ID: ""},
+			getItemErrorToReturn:     nil,
+			deleteItemOutputToReturn: &dynamodb.DeleteItemOutput{},
+			deleteItemErrorToReturn:  nil,
+			expectedErrorString:      "Could not find profile associated with: 123",
+		},
+		{
+			description:              "DB Error- GetProfile puked",
+			id:                       "123",
+			getItemOutputToReturn:    &dynamodb.GetItemOutput{},
+			getItemReturnObject:      entity.Profile{},
+			getItemErrorToReturn:     errors.New("puke"),
+			deleteItemOutputToReturn: &dynamodb.DeleteItemOutput{},
+			deleteItemErrorToReturn:  nil,
+			expectedErrorString:      "puke",
+		},
+		{
 			description:              "DB Error- DeleteItem puked",
 			id:                       "123",
+			getItemOutputToReturn:    &dynamodb.GetItemOutput{},
+			getItemReturnObject:      entity.Profile{ID: "123"},
+			getItemErrorToReturn:     nil,
 			deleteItemOutputToReturn: &dynamodb.DeleteItemOutput{},
 			deleteItemErrorToReturn:  errors.New("puke"),
 			expectedErrorString:      "puke",
@@ -44,6 +74,10 @@ func TestDeleteProfile(t *testing.T) {
 		mockService := ServiceImpl{
 			Client: dbclient.ClientImpl{
 				DynamoDB: testutils.MockDB{
+					GetItemOutputToReturn: tC.getItemOutputToReturn,
+					GetItemReturnObject:   tC.getItemReturnObject,
+					GetItemErrorToReturn:  tC.getItemErrorToReturn,
+
 					DeleteItemOutputToReturn: tC.deleteItemOutputToReturn,
 					DeleteItemErrorToReturn:  tC.deleteItemErrorToReturn,
 				},

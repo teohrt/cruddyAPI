@@ -1,12 +1,12 @@
 # cruddyAPI
-![cruddyAPI](cruddyAPI.jpeg)
+![cruddyAPI](docs/cruddyAPI.jpeg)
 
 The purpose of this RESTful CRUD API is to manage profile data.
 
 ## Routes
-* [Create profile](contracts/createProfileContract.md)
+* [Create profile](docs/createProfileContract.md)
     * `POST api/v1/cruddyAPI/profiles`
-* [Read / retrieve profile]()
+* [Read / retrieve profile](docs/getProfileContract.md)
     * `GET api/v1/cruddyAPI/profiles/{id}`
 * [Update profile]()
     * `PUT api/v1/cruddyAPI/profiles/{id}`

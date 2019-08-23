@@ -35,9 +35,18 @@ func UpdateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 		}
 
 		if err := svc.UpdateProfile(r.Context(), *profileData, profileID); err != nil {
-			logger.Error().Err(err).Msg("UpdateProfile failed")
-			utils.RespondWithError("UpdateProfile failed", err, http.StatusInternalServerError, w)
-			return
+			if err != nil {
+				switch err.(type) {
+				case service.EmailIncsonsistentWithProfileIDError:
+					logger.Error().Err(err).Msg("UpdateProfile failed: attempted to change email")
+					utils.RespondWithError("UpdateProfile failed: attempted to change email", err, http.StatusBadRequest, w)
+					return
+				default:
+					logger.Error().Err(err).Msg("UpdateProfile failed")
+					utils.RespondWithError("UpdateProfile failed", err, http.StatusInternalServerError, w)
+					return
+				}
+			}
 		}
 
 		w.Header().Add("Content-Type", "application/json")

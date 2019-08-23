@@ -57,6 +57,17 @@ func TestUpdateProfile(t *testing.T) {
 			GetItemErrorToReturn:       nil,
 		},
 		{
+			description:                "Attempted to update email",
+			profileID:                  EMAIL_HASH,
+			bodyToSend:                 `{"email":"` + "appendAdditionalData" + EMAIL + `"}`,
+			expectedStatusCode:         400,
+			expectedResponseBodyResult: "{\"status\":\"Bad Request\",\"message\":\"UpdateProfile failed: attempted to change email\",\"error\":\"Email inconsistent with ProfileID\"}",
+			PutItemErrorToReturn:       nil,
+			GetItemOutputToReturn:      nil,
+			GetItemReturnObject:        nil,
+			GetItemErrorToReturn:       nil,
+		},
+		{
 			description:                "Validation error - missing required attributes - Email",
 			profileID:                  EMAIL_HASH,
 			bodyToSend:                 `{"email":""}`,

@@ -21,20 +21,23 @@ func GetProfile(svc service.Service) http.HandlerFunc {
 		if err != nil {
 			switch err.(type) {
 			case service.ProfileNotFoundError:
-				logger.Error().Err(err).Msg("Profile not found")
-				utils.RespondWithError("Profile not found", err, http.StatusNotFound, w)
+				msg := "Profile not found"
+				logger.Error().Err(err).Msg(msg)
+				utils.RespondWithError(msg, err, http.StatusNotFound, w)
 				return
 			default:
-				logger.Error().Err(err).Msg("Get profile failed")
-				utils.RespondWithError("Get profile failed", err, http.StatusInternalServerError, w)
+				msg := "Get profile failed"
+				logger.Error().Err(err).Msg(msg)
+				utils.RespondWithError(msg, err, http.StatusInternalServerError, w)
 				return
 			}
 		}
 
 		jsonObj, err := json.Marshal(result)
 		if err != nil {
-			logger.Warn().Err(err).Msg("Failed marshalling json")
-			utils.RespondWithError("Failed marshalling json", err, http.StatusInternalServerError, w)
+			msg := "Failed marshalling json"
+			logger.Warn().Err(err).Msg(msg)
+			utils.RespondWithError(msg, err, http.StatusInternalServerError, w)
 			return
 		}
 

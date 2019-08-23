@@ -23,14 +23,16 @@ func UpdateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 
 		profileData := new(entity.ProfileData)
 		if err := decoder.Decode(profileData); err != nil {
-			logger.Debug().Err(err).Msg("Bad req body")
-			utils.RespondWithError("Bad req body", err, http.StatusBadRequest, w)
+			msg := "Bad req body"
+			logger.Debug().Err(err).Msg(msg)
+			utils.RespondWithError(msg, err, http.StatusBadRequest, w)
 			return
 		}
 
 		if err := validateProfile(profileData, v); err != nil {
-			logger.Debug().Err(err).Msg("Profile validation failed")
-			utils.RespondWithError("Profile validation failed", err, http.StatusBadRequest, w)
+			msg := "Profile validation failed"
+			logger.Debug().Err(err).Msg(msg)
+			utils.RespondWithError(msg, err, http.StatusBadRequest, w)
 			return
 		}
 
@@ -38,12 +40,14 @@ func UpdateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 			if err != nil {
 				switch err.(type) {
 				case service.EmailIncsonsistentWithProfileIDError:
-					logger.Error().Err(err).Msg("UpdateProfile failed: attempted to change email")
-					utils.RespondWithError("UpdateProfile failed: attempted to change email", err, http.StatusBadRequest, w)
+					msg := "UpdateProfile failed: attempted to change email"
+					logger.Error().Err(err).Msg(msg)
+					utils.RespondWithError(msg, err, http.StatusBadRequest, w)
 					return
 				default:
-					logger.Error().Err(err).Msg("UpdateProfile failed")
-					utils.RespondWithError("UpdateProfile failed", err, http.StatusInternalServerError, w)
+					msg := "UpdateProfile failed"
+					logger.Error().Err(err).Msg(msg)
+					utils.RespondWithError(msg, err, http.StatusInternalServerError, w)
 					return
 				}
 			}

@@ -19,12 +19,14 @@ func DeleteProfile(svc service.Service) http.HandlerFunc {
 		if err := svc.DeleteProfile(r.Context(), profileID); err != nil {
 			switch err.(type) {
 			case service.ProfileNotFoundError:
-				logger.Error().Err(err).Msg("Profile not found")
-				utils.RespondWithError("Profile not found", err, http.StatusNotFound, w)
+				msg := "Profile not found"
+				logger.Error().Err(err).Msg(msg)
+				utils.RespondWithError(msg, err, http.StatusNotFound, w)
 				return
 			default:
-				logger.Error().Err(err).Msg("DeleteProfile failed")
-				utils.RespondWithError("DeleteProfile failed", err, http.StatusInternalServerError, w)
+				msg := "DeleteProfile failed"
+				logger.Error().Err(err).Msg(msg)
+				utils.RespondWithError(msg, err, http.StatusInternalServerError, w)
 				return
 			}
 		}

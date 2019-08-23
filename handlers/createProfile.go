@@ -22,14 +22,16 @@ func CreateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 
 		profile := new(entity.ProfileData)
 		if err := decoder.Decode(profile); err != nil {
-			logger.Debug().Err(err).Msg("Bad req body")
-			utils.RespondWithError("Bad req body", err, http.StatusBadRequest, w)
+			msg := "Bad req body"
+			logger.Debug().Err(err).Msg(msg)
+			utils.RespondWithError(msg, err, http.StatusBadRequest, w)
 			return
 		}
 
 		if err := validateProfile(profile, v); err != nil {
-			logger.Debug().Err(err).Msg("Profile validation failed")
-			utils.RespondWithError("Profile validation failed", err, http.StatusBadRequest, w)
+			msg := "Profile validation failed"
+			logger.Debug().Err(err).Msg(msg)
+			utils.RespondWithError(msg, err, http.StatusBadRequest, w)
 			return
 		}
 
@@ -37,20 +39,23 @@ func CreateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 		if err != nil {
 			switch err.(type) {
 			case service.ProfileAlreadyExistsError:
-				logger.Debug().Err(err).Msg("Profile already exists")
-				utils.RespondWithError("Profile already exists", err, http.StatusBadRequest, w)
+				msg := "Profile already exists"
+				logger.Debug().Err(err).Msg(msg)
+				utils.RespondWithError(msg, err, http.StatusBadRequest, w)
 				return
 			default:
-				logger.Error().Err(err).Msg("Adding profile failed")
-				utils.RespondWithError("Adding profile failed", err, http.StatusInternalServerError, w)
+				msg := "Adding profile failed"
+				logger.Error().Err(err).Msg(msg)
+				utils.RespondWithError(msg, err, http.StatusInternalServerError, w)
 				return
 			}
 		}
 
 		jsonObj, err := json.Marshal(result)
 		if err != nil {
-			logger.Warn().Err(err).Msg("Failed marshalling json")
-			utils.RespondWithError("Failed marshalling json", err, http.StatusInternalServerError, w)
+			msg := "Failed marshalling json"
+			logger.Warn().Err(err).Msg(msg)
+			utils.RespondWithError(msg, err, http.StatusInternalServerError, w)
 			return
 		}
 

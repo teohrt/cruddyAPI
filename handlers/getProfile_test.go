@@ -64,13 +64,13 @@ func TestGetProfileHandler(t *testing.T) {
 			expectedResponseBodyResult: "{\"status\":\"Internal Server Error\",\"message\":\"Get profile failed\",\"error\":\"puke\"}",
 		},
 		{
-			description:                "DB Error - GetProfile failed",
+			description:                "Happy path - Profile doesn't exist",
 			profileID:                  "123",
 			getItemOutputToReturn:      &dynamodb.GetItemOutput{},
 			getItemReturnObject:        entity.Profile{},
 			getItemErrorToReturn:       nil,
-			expectedStatusCode:         500,
-			expectedResponseBodyResult: "{\"status\":\"Internal Server Error\",\"message\":\"Get profile failed\",\"error\":\"Could not find profile associated with: \"}",
+			expectedStatusCode:         404,
+			expectedResponseBodyResult: "{\"status\":\"Not Found\",\"message\":\"Profile not found\",\"error\":\"Could not find profile associated with: \"}",
 		},
 	}
 

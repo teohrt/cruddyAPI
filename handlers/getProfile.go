@@ -19,9 +19,16 @@ func GetProfile(svc service.Service) http.HandlerFunc {
 
 		result, err := svc.GetProfile(r.Context(), profileID)
 		if err != nil {
-			logger.Error().Err(err).Msg("Get profile failed")
-			utils.RespondWithError("Get profile failed", err, http.StatusInternalServerError, w)
-			return
+			switch err.(type) {
+			case service.ProfileNotFoundError:
+				logger.Error().Err(err).Msg("Profile not found")
+				utils.RespondWithError("Profile not found", err, http.StatusNotFound, w)
+				return
+			default:
+				logger.Error().Err(err).Msg("Get profile failed")
+				utils.RespondWithError("Get profile failed", err, http.StatusInternalServerError, w)
+				return
+			}
 		}
 
 		jsonObj, err := json.Marshal(result)

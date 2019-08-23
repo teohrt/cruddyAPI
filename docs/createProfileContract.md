@@ -8,7 +8,7 @@ Create a Profile for the user if one does not already exist. Profiles and emails
 
 **Auth required** : NO
 
-**Permissions required** : None
+**Permissions required** : NO
 
 **Data example** Email is the only required field
 

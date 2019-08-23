@@ -12,7 +12,7 @@ The purpose of this RESTful CRUD API is to manage profile data.
     * `PUT api/v1/cruddyAPI/profiles/{id}`
 * [Delete profile](docs/deleteProfileContract.md)
     * `DELETE api/v1/cruddyAPI/profiles/{id}`
-* [Health]()
+* [Health](docs/healthContract.md)
     * `GET api/v1/health/ping`
 
 ## Requirements

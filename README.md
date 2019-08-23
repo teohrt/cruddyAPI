@@ -8,7 +8,7 @@ The purpose of this RESTful CRUD API is to manage profile data.
     * `POST api/v1/cruddyAPI/profiles`
 * [Read / retrieve profile](docs/getProfileContract.md)
     * `GET api/v1/cruddyAPI/profiles/{id}`
-* [Update profile]()
+* [Update profile](docs/updateProfileContract.md)
     * `PUT api/v1/cruddyAPI/profiles/{id}`
 * [Delete profile]()
     * `DELETE api/v1/cruddyAPI/profiles/{id}`

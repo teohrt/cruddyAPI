@@ -1,3 +1,5 @@
+[Back](../README.md)
+
 # Health
 
 A helpful endpoint that responds with a 200 code when live

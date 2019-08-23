@@ -12,9 +12,9 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/gorilla/mux"
 	"github.com/teohrt/cruddyAPI/dbclient"
+	"github.com/teohrt/cruddyAPI/dbclient/mock"
 	"github.com/teohrt/cruddyAPI/entity"
 	"github.com/teohrt/cruddyAPI/service"
-	"github.com/teohrt/cruddyAPI/testutils"
 
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/assert"
@@ -80,7 +80,7 @@ func TestDeleteProfileHandler(t *testing.T) {
 
 			mockService := service.ServiceImpl{
 				Client: dbclient.ClientImpl{
-					DynamoDB: testutils.MockDB{
+					DynamoDB: mock.DB{
 						DeleteItemErrorToReturn: tC.deleteItemErrorToReturn,
 
 						GetItemOutputToReturn: tC.getItemOutputToReturn,

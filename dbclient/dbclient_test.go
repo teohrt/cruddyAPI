@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/assert"
-	"github.com/teohrt/cruddyAPI/testutils"
+	"github.com/teohrt/cruddyAPI/dbclient/mock"
 )
 
 func TestNewDBClient(t *testing.T) {
@@ -55,7 +55,7 @@ func TestGetItem(t *testing.T) {
 		logger := zerolog.New(os.Stdout)
 
 		mockClient := ClientImpl{
-			DynamoDB: testutils.MockDB{
+			DynamoDB: mock.DB{
 				GetItemOutputToReturn: tC.getItemOutputToReturn,
 				GetItemErrorToReturn:  tC.getItemErrorToReturn,
 			},
@@ -101,7 +101,7 @@ func TestUpsertItem(t *testing.T) {
 		logger := zerolog.New(os.Stdout)
 
 		clientImpl := ClientImpl{
-			DynamoDB: testutils.MockDB{
+			DynamoDB: mock.DB{
 				PutItemOutputToReturn: tC.queryOutputToReturn,
 				PutItemErrorToReturn:  tC.queryErrorToReturn,
 			},
@@ -152,7 +152,7 @@ func TestDeleteItem(t *testing.T) {
 		logger := zerolog.New(os.Stdout)
 
 		mockClient := ClientImpl{
-			DynamoDB: testutils.MockDB{
+			DynamoDB: mock.DB{
 				DeleteItemOutputToReturn: tC.deleteItemOutputToReturn,
 				DeleteItemErrorToReturn:  tC.deleteItemErrorToReturn,
 			},

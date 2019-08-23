@@ -11,9 +11,9 @@ import (
 	"testing"
 
 	"github.com/teohrt/cruddyAPI/dbclient"
+	"github.com/teohrt/cruddyAPI/dbclient/mock"
 	"github.com/teohrt/cruddyAPI/entity"
 	"github.com/teohrt/cruddyAPI/service"
-	"github.com/teohrt/cruddyAPI/testutils"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/go-chi/chi"
@@ -168,7 +168,7 @@ func TestCreateProfileHandler(t *testing.T) {
 
 			mockService := service.ServiceImpl{
 				Client: dbclient.ClientImpl{
-					DynamoDB: testutils.MockDB{
+					DynamoDB: mock.DB{
 						GetItemOutputToReturn: tC.getItemOutputToReturn,
 						GetItemReturnObject:   tC.getItemReturnObject,
 						GetItemErrorToReturn:  tC.getItemErrorToReturn,

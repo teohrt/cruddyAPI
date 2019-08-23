@@ -14,8 +14,8 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/teohrt/cruddyAPI/dbclient"
+	"github.com/teohrt/cruddyAPI/dbclient/mock"
 	"github.com/teohrt/cruddyAPI/entity"
-	"github.com/teohrt/cruddyAPI/testutils"
 )
 
 func TestCreateProfile(t *testing.T) {
@@ -81,7 +81,7 @@ func TestCreateProfile(t *testing.T) {
 
 		mockService := ServiceImpl{
 			Client: dbclient.ClientImpl{
-				DynamoDB: testutils.MockDB{
+				DynamoDB: mock.DB{
 					PutItemOutputToReturn: tC.putItemOutputToReturn,
 					PutItemErrorToReturn:  tC.putItemErrorToReturn,
 					GetItemOutputToReturn: tC.getItemOutput,

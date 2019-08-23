@@ -1,4 +1,4 @@
-package testutils
+package mock
 
 import (
 	"context"
@@ -13,7 +13,7 @@ const (
 	MockTableName = "profiles"
 )
 
-type MockDB struct {
+type DB struct {
 	dynamodbiface.DynamoDBAPI
 
 	PutItemOutputToReturn *dynamodb.PutItemOutput
@@ -27,11 +27,11 @@ type MockDB struct {
 	DeleteItemErrorToReturn  error
 }
 
-func (m MockDB) PutItemWithContext(ctx context.Context, input *dynamodb.PutItemInput, options ...request.Option) (*dynamodb.PutItemOutput, error) {
+func (m DB) PutItemWithContext(ctx context.Context, input *dynamodb.PutItemInput, options ...request.Option) (*dynamodb.PutItemOutput, error) {
 	return m.PutItemOutputToReturn, m.PutItemErrorToReturn
 }
 
-func (m MockDB) GetItemWithContext(ctx context.Context, input *dynamodb.GetItemInput, options ...request.Option) (*dynamodb.GetItemOutput, error) {
+func (m DB) GetItemWithContext(ctx context.Context, input *dynamodb.GetItemInput, options ...request.Option) (*dynamodb.GetItemOutput, error) {
 	o := m.GetItemOutputToReturn
 	if o != nil {
 		o.Item = map[string]*dynamodb.AttributeValue{}
@@ -44,6 +44,6 @@ func (m MockDB) GetItemWithContext(ctx context.Context, input *dynamodb.GetItemI
 	return o, m.GetItemErrorToReturn
 }
 
-func (m MockDB) DeleteItemWithContext(ctx context.Context, input *dynamodb.DeleteItemInput, options ...request.Option) (*dynamodb.DeleteItemOutput, error) {
+func (m DB) DeleteItemWithContext(ctx context.Context, input *dynamodb.DeleteItemInput, options ...request.Option) (*dynamodb.DeleteItemOutput, error) {
 	return m.DeleteItemOutputToReturn, m.DeleteItemErrorToReturn
 }

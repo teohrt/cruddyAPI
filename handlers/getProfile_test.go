@@ -70,7 +70,7 @@ func TestGetProfileHandler(t *testing.T) {
 			getItemReturnObject:        entity.Profile{},
 			getItemErrorToReturn:       nil,
 			expectedStatusCode:         404,
-			expectedResponseBodyResult: "{\"status\":\"Not Found\",\"message\":\"Profile not found\",\"error\":\"Could not find profile associated with: \"}",
+			expectedResponseBodyResult: "{\"status\":\"Not Found\",\"message\":\"Profile not found\",\"error\":\"Could not find profile associated with: 123\"}",
 		},
 	}
 

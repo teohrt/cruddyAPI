@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi"
 	"github.com/rs/zerolog"
 	"github.com/teohrt/cruddyAPI/entity"
 	"github.com/teohrt/cruddyAPI/service"
@@ -18,8 +18,7 @@ func UpdateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 		defer r.Body.Close()
 		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 		decoder := json.NewDecoder(r.Body)
-		params := mux.Vars(r)
-		profileID := params["id"]
+		profileID := chi.URLParam(r, "id")
 
 		profileData := new(entity.ProfileData)
 		if err := decoder.Decode(profileData); err != nil {

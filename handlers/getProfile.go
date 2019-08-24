@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi"
 	"github.com/rs/zerolog"
 	"github.com/teohrt/cruddyAPI/service"
 	"github.com/teohrt/cruddyAPI/utils"
@@ -14,8 +14,7 @@ import (
 func GetProfile(svc service.Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
-		params := mux.Vars(r)
-		profileID := params["id"]
+		profileID := chi.URLParam(r, "id")
 
 		result, err := svc.GetProfile(r.Context(), profileID)
 		if err != nil {

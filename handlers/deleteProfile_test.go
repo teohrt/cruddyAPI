@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi"
 	"github.com/teohrt/cruddyAPI/dbclient"
 	"github.com/teohrt/cruddyAPI/dbclient/mock"
 	"github.com/teohrt/cruddyAPI/entity"
@@ -92,10 +92,8 @@ func TestDeleteProfileHandler(t *testing.T) {
 				Logger: &logger,
 			}
 
-			r := mux.NewRouter()
-			s := r.PathPrefix("/test").Subrouter()
-			s.HandleFunc("/{id}", DeleteProfile(mockService)).Methods(http.MethodDelete)
-
+			r := chi.NewRouter()
+			r.Delete("/test/{id}", DeleteProfile(mockService))
 			ts := httptest.NewServer(r)
 			defer ts.Close()
 

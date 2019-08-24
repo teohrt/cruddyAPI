@@ -10,7 +10,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi"
 	"github.com/teohrt/cruddyAPI/dbclient"
 	"github.com/teohrt/cruddyAPI/dbclient/mock"
 	"github.com/teohrt/cruddyAPI/entity"
@@ -109,10 +109,8 @@ func TestUpdateProfile(t *testing.T) {
 				Logger: &logger,
 			}
 
-			r := mux.NewRouter()
-			s := r.PathPrefix("/test").Subrouter()
-			s.HandleFunc("/{id}", UpdateProfile(mockService, validator.New())).Methods(http.MethodPut)
-
+			r := chi.NewRouter()
+			r.Put("/test/{id}", UpdateProfile(mockService, validator.New()))
 			ts := httptest.NewServer(r)
 			defer ts.Close()
 

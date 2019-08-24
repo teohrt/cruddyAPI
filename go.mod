@@ -3,7 +3,7 @@ module github.com/teohrt/cruddyAPI
 go 1.12
 
 require (
-	github.com/apex/gateway v1.1.1 // indirect
+	github.com/apex/gateway v1.1.1
 	github.com/aws/aws-lambda-go v1.13.0 // indirect
 	github.com/aws/aws-sdk-go v1.23.7
 	github.com/caarlos0/env v3.5.0+incompatible

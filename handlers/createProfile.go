@@ -39,6 +39,7 @@ func CreateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 		if err != nil {
 			switch err.(type) {
 			case service.ProfileAlreadyExistsError:
+				w.Header().Add("Location", fmt.Sprintf("api/v1/profiles/%v", utils.Hash(profile.Email)))
 				msg := "Profile already exists"
 				logger.Debug().Err(err).Msg(msg)
 				utils.RespondWithError(msg, err, http.StatusBadRequest, w)
@@ -60,7 +61,7 @@ func CreateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc 
 		}
 
 		w.Header().Add("Content-Type", "application/json")
-		w.Header().Add("Location", fmt.Sprintf("/profiles/%v", result.ProfileID))
+		w.Header().Add("Location", fmt.Sprintf("api/v1/profiles/%v", result.ProfileID))
 		w.WriteHeader(http.StatusCreated)
 		w.Write(jsonObj)
 		return

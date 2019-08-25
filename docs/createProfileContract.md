@@ -48,7 +48,7 @@ Create a Profile for the user if one does not already exist. Profiles and emails
 
 **Code** : `400 BAD REQUEST`
 
-**Headers** : `Location: http://testserver/api/profiles/123/`
+**Headers** : `Location: api/v1/profiles/123`
 
 **Content** : 
 ```json

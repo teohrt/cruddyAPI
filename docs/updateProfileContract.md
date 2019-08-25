@@ -40,8 +40,6 @@ Update existing Profiles.
 
 **Code** : `400 BAD REQUEST`
 
-**Headers** : `Location: http://testserver/api/profiles/123/`
-
 **Response** : 
 ```json
 {

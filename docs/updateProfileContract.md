@@ -4,7 +4,7 @@
 
 Update existing Profiles.
 
-**URL** : `api/v1/cruddyAPI/profiles/{id}`
+**URL** : `api/v1/profiles/{id}`
 
 **Method** : `PUT`
 

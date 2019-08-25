@@ -4,7 +4,7 @@
 
 Delete a Profile with a given ID
 
-**URL** : `api/v1/cruddyAPI/profiles/{id}`
+**URL** : `api/v1/profiles/{id}`
 
 **Method** : `DELETE`
 

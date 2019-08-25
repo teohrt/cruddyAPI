@@ -4,7 +4,7 @@
 
 Retrieve Profile data for a user specified by ProfileID.
 
-**URL** : `api/v1/cruddyAPI/profiles/{id}`
+**URL** : `api/v1/profiles/{id}`
 
 **Method** : `GET`
 

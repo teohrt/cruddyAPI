@@ -4,7 +4,7 @@
 
 Create a Profile for the user if one does not already exist. Profiles and emails are 1 to 1.
 
-**URL** : `api/v1/cruddyAPI/profiles`
+**URL** : `api/v1/profiles`
 
 **Method** : `POST`
 

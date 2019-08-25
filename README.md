@@ -5,15 +5,15 @@ The purpose of this RESTful CRUD API is to manage profile data.
 
 ## Routes
 * [Create profile](docs/createProfileContract.md)
-    * `POST api/v1/cruddyAPI/profiles`
+    * `POST api/v1/profiles`
 * [Read / retrieve profile](docs/getProfileContract.md)
-    * `GET api/v1/cruddyAPI/profiles/{id}`
+    * `GET api/v1/profiles/{id}`
 * [Update profile](docs/updateProfileContract.md)
-    * `PUT api/v1/cruddyAPI/profiles/{id}`
+    * `PUT api/v1/profiles/{id}`
 * [Delete profile](docs/deleteProfileContract.md)
-    * `DELETE api/v1/cruddyAPI/profiles/{id}`
+    * `DELETE api/v1/profiles/{id}`
 * [Health](docs/healthContract.md)
-    * `GET api/v1/health/ping`
+    * `GET api/v1/health`
 
 ## Requirements
 ### Deployment Requirements
@@ -43,7 +43,7 @@ make db-start
 ```
 
 Now, initialize the db table in another terminal and start the API server with these commands:
-* This app listens to API Gateway requests by default. To make it accessible to normal http requests, comment out line 36 and uncomment lines 19 and 34 in file "app/app.go"
+* This app listens to API Gateway requests by default. To make it accessible to normal http requests, comment out line 37 and uncomment lines 17 and 35 in file "app/app.go"
 ```bash
 make db-table-init
 make run-locally

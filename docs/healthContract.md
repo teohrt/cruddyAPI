@@ -4,7 +4,7 @@
 
 A helpful endpoint that responds with a 200 code when live
 
-**URL** : `api/v1/health/ping`
+**URL** : `api/v1/health`
 
 **Method** : `GET`
 

@@ -26,7 +26,7 @@ resource "aws_lambda_permission" "apigateway_lambda_invoke" {
   action        = "lambda:InvokeFunction"
   function_name = "${aws_lambda_function.cruddyAPI.arn}"
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_deployment.deployment_v1.execution_arn}/*"
+  source_arn    = "${aws_api_gateway_deployment.deployment_api.execution_arn}/*"
 }
 
 resource "aws_iam_role" "cruddyAPI_lambda" {

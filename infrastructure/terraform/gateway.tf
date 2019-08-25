@@ -3,7 +3,7 @@ resource "aws_api_gateway_rest_api" "cruddyAPI" {
   description = "This is my API for demonstration purposes"
 }
 
-resource "aws_api_gateway_deployment" "deployment_v1" {
+resource "aws_api_gateway_deployment" "deployment_api" {
   rest_api_id = "${aws_api_gateway_rest_api.cruddyAPI.id}"
   stage_name  = "api"
 

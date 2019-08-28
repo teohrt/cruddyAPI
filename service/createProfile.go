@@ -8,12 +8,14 @@ import (
 )
 
 func (svc ServiceImpl) CreateProfile(ctx context.Context, profileData entity.ProfileData) (entity.CreateProfileResult, error) {
+	ctx, seg := utils.StartXraySegment(ctx, "CreateProfile service")
 	profileID := utils.Hash(profileData.Email)
 
 	_, err := svc.GetProfile(ctx, profileID)
 	if err != nil {
+		seg.Close(err)
 		switch err.(type) {
-		case ProfileNotFoundError: // Profile has not been previous created for this ID. We can proceed with creation
+		case ProfileNotFoundError: // Profile has not been previously created for this ID. We can proceed with creation
 			_, err = svc.Client.UpsertItem(ctx, entity.Profile{
 				ID:          profileID,
 				ProfileData: profileData,
@@ -31,5 +33,6 @@ func (svc ServiceImpl) CreateProfile(ctx context.Context, profileData entity.Pro
 		}
 	}
 
+	seg.Close(nil)
 	return entity.CreateProfileResult{}, ProfileAlreadyExistsError{"Can not create profile. Already exists"}
 }

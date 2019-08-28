@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/aws/aws-xray-sdk-go/xray"
 	"github.com/go-chi/chi"
 	"github.com/rs/zerolog"
 	"github.com/teohrt/cruddyAPI/service"
@@ -14,7 +13,7 @@ import (
 
 func GetProfile(svc service.Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ctx, seg := xray.BeginSegment(r.Context(), "GetProfile handler")
+		ctx, seg := utils.StartXraySegment(r.Context(), "GetProfile handler")
 		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 		profileID := chi.URLParam(r, "id")
 

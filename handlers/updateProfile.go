@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/aws/aws-xray-sdk-go/xray"
 	"github.com/go-chi/chi"
 	"github.com/rs/zerolog"
 	"github.com/teohrt/cruddyAPI/entity"
@@ -17,7 +16,7 @@ import (
 func UpdateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
-		ctx, seg := xray.BeginSegment(r.Context(), "UpdateProfile handler")
+		ctx, seg := utils.StartXraySegment(r.Context(), "UpdateProfile handler")
 		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 		decoder := json.NewDecoder(r.Body)
 		profileID := chi.URLParam(r, "id")

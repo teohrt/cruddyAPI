@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/aws/aws-xray-sdk-go/xray"
 	"github.com/go-chi/chi"
 	"github.com/rs/zerolog"
 	"github.com/teohrt/cruddyAPI/service"
@@ -13,7 +12,7 @@ import (
 
 func DeleteProfile(svc service.Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ctx, seg := xray.BeginSegment(r.Context(), "DeleteProfile handler")
+		ctx, seg := utils.StartXraySegment(r.Context(), "DeleteProfile handler")
 		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 		profileID := chi.URLParam(r, "id")
 

@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/aws/aws-xray-sdk-go/xray"
 	"github.com/rs/zerolog"
 	"gopkg.in/go-playground/validator.v9"
 
@@ -18,7 +17,7 @@ import (
 func CreateProfile(svc service.Service, v *validator.Validate) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
-		ctx, seg := xray.BeginSegment(r.Context(), "CreateProfile handler")
+		ctx, seg := utils.StartXraySegment(r.Context(), "CreateProfile handler")
 		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 		decoder := json.NewDecoder(r.Body)
 

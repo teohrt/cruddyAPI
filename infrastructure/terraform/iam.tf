@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "cruddyAPI_lambda_policy" {
     sid       = "profileDynamoDB"
     resources = ["${aws_dynamodb_table.profiles.arn}"]
     effect    = "Allow"
-    actions   = ["dynamodb:PutItem", "dynamodb:GetItem"]
+    actions   = ["dynamodb:PutItem", "dynamodb:GetItem", "dynamodb:DeleteItem"]
   }
 
   statement {

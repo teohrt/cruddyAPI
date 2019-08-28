@@ -7,6 +7,10 @@ resource "aws_lambda_function" "cruddyAPI" {
   timeout          = "30"
   role             = "${aws_iam_role.cruddyAPI_lambda.arn}"
 
+  tracing_config {
+    mode = "Active"
+  }
+
   environment {
     variables = {
       LOG_LEVEL            = "debug"

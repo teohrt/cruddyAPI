@@ -20,6 +20,11 @@ data "aws_iam_policy_document" "cruddyAPI_lambda_policy" {
     effect    = "Allow"
     actions   = ["dynamodb:PutItem", "dynamodb:GetItem"]
   }
+
+  statement {
+    actions   = ["xray:PutTraceSegments", "xray:PutTelemetryRecords", "xray:GetSamplingRules", "xray:GetSamplingTargets", "xray:GetSamplingStatisticSummaries"]
+    resources = ["*"]
+  }
 }
 
 resource "aws_lambda_permission" "apigateway_lambda_invoke" {

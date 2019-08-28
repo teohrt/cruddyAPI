@@ -80,7 +80,7 @@ func TestDeleteProfileHandler(t *testing.T) {
 
 			mockService := service.ServiceImpl{
 				Client: dbclient.ClientImpl{
-					DynamoDB: mock.DB{
+					Conn: mock.DB{
 						DeleteItemErrorToReturn: tC.deleteItemErrorToReturn,
 
 						GetItemOutputToReturn: tC.getItemOutputToReturn,

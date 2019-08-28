@@ -98,7 +98,7 @@ func TestUpdateProfile(t *testing.T) {
 
 			mockService := service.ServiceImpl{
 				Client: dbclient.ClientImpl{
-					DynamoDB: mock.DB{
+					Conn: mock.DB{
 						GetItemOutputToReturn: tC.GetItemOutputToReturn,
 						GetItemReturnObject:   tC.GetItemReturnObject,
 						GetItemErrorToReturn:  tC.GetItemErrorToReturn,

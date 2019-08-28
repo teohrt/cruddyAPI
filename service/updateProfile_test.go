@@ -6,8 +6,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/teohrt/cruddyAPI/dbclient/mock"
 	"github.com/teohrt/cruddyAPI/dbclient"
+	"github.com/teohrt/cruddyAPI/dbclient/mock"
 	"github.com/teohrt/cruddyAPI/entity"
 
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -88,7 +88,7 @@ func TestUpdateProfile(t *testing.T) {
 
 		mockService := ServiceImpl{
 			Client: dbclient.ClientImpl{
-				DynamoDB: mock.DB{
+				Conn: mock.DB{
 					GetItemOutputToReturn: tC.GetItemOutputToReturn,
 					GetItemErrorToReturn:  tC.GetItemErrorToReturn,
 					GetItemReturnObject:   tC.GetItemReturnObject,

@@ -81,7 +81,7 @@ func TestGetProfileHandler(t *testing.T) {
 
 			mockService := service.ServiceImpl{
 				Client: dbclient.ClientImpl{
-					DynamoDB: mock.DB{
+					Conn: mock.DB{
 						GetItemOutputToReturn: tC.getItemOutputToReturn,
 						GetItemReturnObject:   tC.getItemReturnObject,
 						GetItemErrorToReturn:  tC.getItemErrorToReturn,

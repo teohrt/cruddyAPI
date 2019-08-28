@@ -55,7 +55,7 @@ func TestGetItem(t *testing.T) {
 		logger := zerolog.New(os.Stdout)
 
 		mockClient := ClientImpl{
-			DynamoDB: mock.DB{
+			Conn: mock.DB{
 				GetItemOutputToReturn: tC.getItemOutputToReturn,
 				GetItemErrorToReturn:  tC.getItemErrorToReturn,
 			},
@@ -101,7 +101,7 @@ func TestUpsertItem(t *testing.T) {
 		logger := zerolog.New(os.Stdout)
 
 		clientImpl := ClientImpl{
-			DynamoDB: mock.DB{
+			Conn: mock.DB{
 				PutItemOutputToReturn: tC.queryOutputToReturn,
 				PutItemErrorToReturn:  tC.queryErrorToReturn,
 			},
@@ -152,7 +152,7 @@ func TestDeleteItem(t *testing.T) {
 		logger := zerolog.New(os.Stdout)
 
 		mockClient := ClientImpl{
-			DynamoDB: mock.DB{
+			Conn: mock.DB{
 				DeleteItemOutputToReturn: tC.deleteItemOutputToReturn,
 				DeleteItemErrorToReturn:  tC.deleteItemErrorToReturn,
 			},

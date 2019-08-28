@@ -81,7 +81,7 @@ func TestCreateProfile(t *testing.T) {
 
 		mockService := ServiceImpl{
 			Client: dbclient.ClientImpl{
-				DynamoDB: mock.DB{
+				Conn: mock.DB{
 					PutItemOutputToReturn: tC.putItemOutputToReturn,
 					PutItemErrorToReturn:  tC.putItemErrorToReturn,
 					GetItemOutputToReturn: tC.getItemOutput,

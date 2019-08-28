@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbiface"
+	"github.com/aws/aws-xray-sdk-go/xray"
 	"github.com/rs/zerolog"
 )
 
@@ -24,7 +25,7 @@ type Client interface {
 }
 
 type ClientImpl struct {
-	DynamoDB  dynamodbiface.DynamoDBAPI
+	Conn      dynamodbiface.DynamoDBAPI
 	TableName string
 	Logger    *zerolog.Logger
 }
@@ -35,15 +36,18 @@ func New(config *Config, logger *zerolog.Logger) Client {
 		Endpoint: aws.String(config.AWSSessionEndpoint),
 	}))
 
+	dynamo := dynamodb.New(awsSession)
+	xray.AWS(dynamo.Client)
+
 	return ClientImpl{
-		DynamoDB:  dynamodb.New(awsSession),
+		Conn:      dynamo,
 		TableName: config.DynamoDBTableName,
 		Logger:    logger,
 	}
 }
 
 func (db ClientImpl) GetItem(ctx context.Context, valueName string, value string) (*map[string]*dynamodb.AttributeValue, error) {
-	result, err := db.DynamoDB.GetItemWithContext(ctx, &dynamodb.GetItemInput{
+	result, err := db.Conn.GetItemWithContext(ctx, &dynamodb.GetItemInput{
 		TableName: aws.String(db.TableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			valueName: {
@@ -67,14 +71,14 @@ func (db ClientImpl) UpsertItem(ctx context.Context, in interface{}) (*dynamodb.
 		return nil, err
 	}
 
-	return db.DynamoDB.PutItemWithContext(ctx, &dynamodb.PutItemInput{
+	return db.Conn.PutItemWithContext(ctx, &dynamodb.PutItemInput{
 		Item:      av,
 		TableName: aws.String(db.TableName),
 	})
 }
 
 func (db ClientImpl) DeleteItem(ctx context.Context, keyName string, value string) (*dynamodb.DeleteItemOutput, error) {
-	return db.DynamoDB.DeleteItemWithContext(ctx, &dynamodb.DeleteItemInput{
+	return db.Conn.DeleteItemWithContext(ctx, &dynamodb.DeleteItemInput{
 		TableName: aws.String(db.TableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			keyName: {

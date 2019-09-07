@@ -18,7 +18,7 @@ The purpose of this RESTful CRUD API is to manage profile data.
 ## Requirements
 ### Deployment Requirements
 * [Golang](https://golang.org/dl/) >= 1.11
-* [Terraform](https://www.terraform.io/downloads.html) >= 0.11.11
+* [Terraform](https://www.terraform.io/downloads.html) >= 0.12.8
 * [AWS](https://aws.amazon.com/) Credentials
     * Infrastructure costs fit comfortably within AWS' Free-Tier with typical development usage
 ### Local Development Requirements

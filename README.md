@@ -19,7 +19,7 @@ The purpose of this RESTful CRUD API is to manage profile data.
 ### Deployment Requirements
 * [Golang](https://golang.org/dl/) >= 1.11
 * [Terraform](https://www.terraform.io/downloads.html) >= 0.12.8
-* [AWS](https://aws.amazon.com/) Credentials
+* [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-macos.html#awscli-install-osx-pip) >= 1.16.230
     * Infrastructure costs fit comfortably within AWS' Free-Tier with typical development usage
 ### Local Development Requirements
 * All of the above
@@ -43,12 +43,11 @@ make db-start
 ```
 
 Now, initialize the db table in another terminal and start the API server with these commands:
-* This app listens to API Gateway requests by default. To make it accessible to normal http requests, comment out line 37 and uncomment lines 17 and 35 in file "app/app.go"
+* This app listens to API Gateway requests by default. For local development you will need to make it accessible to normal http requests. Do this by commenting line 37 and uncomment lines 17 and 35 in file "app/app.go". 
 ```bash
 make db-table-init
 make run-locally
 ```
-
 
 ## Licence
 See LICENSE.

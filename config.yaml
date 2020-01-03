@@ -1,8 +1,8 @@
 version: 2
 jobs:
-        build:
-                docker:
-                        - image: circleci/go:1.11
-                steps:
-                        - checkout
-                        - run: echo "Hello world!"
+    build:
+        docker:
+            - image: circleci/go:1.11
+        steps:
+            - checkout
+            - run: echo "Hello world!"

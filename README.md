@@ -1,7 +1,8 @@
+[![CircleCI](https://circleci.com/gh/teohrt/cruddyAPI/tree/master.svg?style=svg)](https://circleci.com/gh/teohrt/cruddyAPI)
 # cruddyAPI
 ![cruddyAPI](docs/cruddyAPI.jpeg)
 
-The purpose of this RESTful CRUD API is to manage profile data.
+This RESTful CRUD API manages profile data.
 
 ## Routes
 * [Create profile](docs/createProfileContract.md)

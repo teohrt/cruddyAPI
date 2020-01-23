@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/go:1.11
     steps:
@@ -16,7 +16,6 @@ jobs:
 
 workflows:
   version: 2
-  build:
+  build-and-test:
     jobs:
-      - build 
-
+      - test 

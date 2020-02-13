@@ -1,8 +1,12 @@
 [![CircleCI](https://circleci.com/gh/teohrt/cruddyAPI/tree/master.svg?style=svg)](https://circleci.com/gh/teohrt/cruddyAPI)
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
+
 # cruddyAPI
 ![cruddyAPI](docs/cruddyAPI.jpeg)
 
-This RESTful CRUD API manages profile data.
+This RESTful CRUD API will manage your profile data on AWS at any scale. Just hit deploy and your new microservice will be up and running!
+
+[API Gateway](https://aws.amazon.com/api-gateway/) routes requests, [Lambda](https://aws.amazon.com/lambda/) handles the corresponding logic and your profile data gets stored in [DynamoDB](https://aws.amazon.com/dynamodb/). Should you like to take a deeper look, logs are stored in [CloudWatch](https://aws.amazon.com/cloudwatch/) and [X-Ray](https://aws.amazon.com/xray/) handles the distributed tracing, both of which conveniently make this microservice's internals available to you in dashboards.
 
 ## Routes
 * [Create profile](docs/createProfileContract.md)

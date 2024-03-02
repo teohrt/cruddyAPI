@@ -75,7 +75,10 @@ Now, initialize the db table in another terminal and start the API server with t
 make db-table-init
 make run-locally
 ```
-
+### Delete Infrastructure
+```bash
+make destroy
+```
 ## Licence
 
 See LICENSE.
